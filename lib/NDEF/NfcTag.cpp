@@ -1,3 +1,4 @@
+#pragma GCC diagnostic ignored "-Wsign-compare"
 #include <NfcTag.h>
 
 NfcTag::NfcTag()
@@ -8,7 +9,7 @@ NfcTag::NfcTag()
     _ndefMessage = (NdefMessage*)NULL;
 }
 
-NfcTag::NfcTag(byte *uid, unsigned int uidLength)
+NfcTag::NfcTag(byte* uid, unsigned int uidLength)
 {
     _uid = uid;
     _uidLength = uidLength;
@@ -16,7 +17,7 @@ NfcTag::NfcTag(byte *uid, unsigned int uidLength)
     _ndefMessage = (NdefMessage*)NULL;
 }
 
-NfcTag::NfcTag(byte *uid, unsigned int  uidLength, String tagType)
+NfcTag::NfcTag(byte* uid, unsigned int  uidLength, String tagType)
 {
     _uid = uid;
     _uidLength = uidLength;
@@ -24,7 +25,7 @@ NfcTag::NfcTag(byte *uid, unsigned int  uidLength, String tagType)
     _ndefMessage = (NdefMessage*)NULL;
 }
 
-NfcTag::NfcTag(byte *uid, unsigned int  uidLength, String tagType, NdefMessage& ndefMessage)
+NfcTag::NfcTag(byte* uid, unsigned int  uidLength, String tagType, NdefMessage& ndefMessage)
 {
     _uid = uid;
     _uidLength = uidLength;
@@ -33,7 +34,7 @@ NfcTag::NfcTag(byte *uid, unsigned int  uidLength, String tagType, NdefMessage& 
 }
 
 // I don't like this version, but it will use less memory
-NfcTag::NfcTag(byte *uid, unsigned int uidLength, String tagType, const byte *ndefData, const int ndefDataLength)
+NfcTag::NfcTag(byte* uid, unsigned int uidLength, String tagType, const byte* ndefData, const int ndefDataLength)
 {
     _uid = uid;
     _uidLength = uidLength;
@@ -65,7 +66,7 @@ uint8_t NfcTag::getUidLength()
     return _uidLength;
 }
 
-void NfcTag::getUid(byte *uid, unsigned int uidLength)
+void NfcTag::getUid(byte* uid, unsigned int uidLength)
 {
     memcpy(uid, _uid, _uidLength < uidLength ? _uidLength : uidLength);
 }

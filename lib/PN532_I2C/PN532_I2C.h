@@ -5,7 +5,7 @@
 #ifndef __PN532_I2C_H__
 #define __PN532_I2C_H__
 
-#include <Arduino.h> 
+#include <Arduino.h>
 #include <Wire.h>
 #include "PN532Interface.h"
 

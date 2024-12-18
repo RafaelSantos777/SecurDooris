@@ -1,3 +1,6 @@
+#pragma GCC diagnostic ignored "-Wsign-compare"
+#pragma GCC diagnostic ignored "-Wunused-variable"
+#pragma GCC diagnostic ignored "-Wsequence-point"
 #include <NdefMessage.h>
 
 NdefMessage::NdefMessage(void)

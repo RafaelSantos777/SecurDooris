@@ -1,8 +1,8 @@
-
+#pragma GCC diagnostic ignored "-Wsign-compare"
 #include "snep.h"
 #include "PN532_debug.h"
 
-int8_t SNEP::write(const uint8_t *buf, uint8_t len, uint16_t timeout)
+int8_t SNEP::write(const uint8_t* buf, uint8_t len, uint16_t timeout)
 {
 	if (0 >= llcp.activate(timeout)) {
 		DMSG("failed to activate PN532 as a target\n");
@@ -48,7 +48,7 @@ int8_t SNEP::write(const uint8_t *buf, uint8_t len, uint16_t timeout)
 	return 1;
 }
 
-int16_t SNEP::read(uint8_t *buf, uint8_t len, uint16_t timeout)
+int16_t SNEP::read(uint8_t* buf, uint8_t len, uint16_t timeout)
 {
 	if (0 >= llcp.activate(timeout)) {
 		DMSG("failed to activate PN532 as a target\n");
@@ -83,9 +83,9 @@ int16_t SNEP::read(uint8_t *buf, uint8_t len, uint16_t timeout)
 	uint32_t length = (buf[2] << 24) + (buf[3] << 16) + (buf[4] << 8) + buf[5];
 	// length should not be more than 244 (header + body < 255, header = 6 + 3 + 2)
 	if (length > (status - 6)) {
-		DMSG("The SNEP message is too large: "); 
-        DMSG_INT(length);
-        DMSG_INT(status - 6);
+		DMSG("The SNEP message is too large: ");
+		DMSG_INT(length);
+		DMSG_INT(status - 6);
 		DMSG("\n");
 		return -4;
 	}

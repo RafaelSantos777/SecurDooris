@@ -16,10 +16,8 @@ void setup(void)
     nfc.begin();
 }
 
-void loop()
-{
-    if (nfc.tagPresent())
-    {
+void loop() {
+    if (nfc.tagPresent()) {
         NfcTag tag = nfc.read();
         tag.print();
         tagId = tag.getUidString();
