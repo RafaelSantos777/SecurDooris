@@ -15,9 +15,10 @@ void RGBLED::setColor(Color color, unsigned long duration) {
 }
 
 void RGBLED::update() {
-    if (millis() > endTime)
+    if (endTime == 0 || millis() < endTime)
         return;
     setColor(OFF);
+    resetTimer();
 }
 
 void RGBLED::resetTimer() {
