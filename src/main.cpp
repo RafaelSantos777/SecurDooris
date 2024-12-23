@@ -1,27 +1,43 @@
 #include <Arduino.h>
-#include <Wire.h>
-#include <PN532_I2C.h>
-#include <PN532.h>
-#include <NfcAdapter.h>
+#include <Buzzer.h>
+#include <LightSensor.h>
+#include <RGBLED.h>
+#include <SecurDorisNFCAdapter.h>
+#include <SecurDorisServo.h>
 
-PN532_I2C pn532_i2c(Wire);
-NfcAdapter nfc = NfcAdapter(pn532_i2c);
-String tagId = "None";
-byte nuidPICC[4];
+Buzzer buzzer(2); // Change pin numbers
+LightSensor lightSensor(A0);
+RGBLED rgbLed(4, 5, 6);
+SecurDorisNFCAdapter nfcAdapter;
+SecurDoorisServo servo(8);
 
-void setup(void)
-{
+// TEMPORARY CODE
+unsigned long blockEndTime = 0;
+
+void blockReadings(long duration) {
+    blockEndTime = millis() + duration;
+}
+
+bool areReadingsBlocked() {
+    return millis() < blockEndTime;
+}
+// TEMPORARY CODE
+
+void setup(void) {
     Serial.begin(115200);
-    Serial.println("System initialized");
-    nfc.begin();
 }
 
 void loop() {
-    if (nfc.tagPresent()) {
-        NfcTag tag = nfc.read();
-        tag.print();
-        tagId = tag.getUidString();
-        Serial.println(tagId);
-    }
-    delay(5000);
+    delay(10);
+    rgbLed.update();
+    servo.update();
+    if (areReadingsBlocked() || !nfcAdapter.tagPresent())
+        return;
+    blockReadings(2000);
+    String nfcTagId = nfcAdapter.getTagId();
+    Serial.println("NFC Tag ID: " + nfcTagId);
+    Serial.println("Lightness %: " + lightSensor.getLightPercentage());
+    buzzer.buzz(3000, 5000);
+    rgbLed.setColor(GREEN, 5000);
+    servo.rotate(90, 1500);
 }
