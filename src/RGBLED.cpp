@@ -6,22 +6,18 @@ RGBLED::RGBLED(int redPin, int greenPin, int bluePin) : redPin(redPin), greenPin
     pinMode(bluePin, OUTPUT);
 }
 
-void RGBLED::setColor(Color color) {
+void RGBLED::setColor(Color color, unsigned long duration) {
     analogWrite(redPin, color.red);
     analogWrite(greenPin, color.green);
     analogWrite(bluePin, color.blue);
-}
-
-void RGBLED::setColor(Color color, long duration) {
-    setColor(color);
-    endTime = millis() + duration;
+    if (duration > 0)
+        endTime = millis() + duration;
 }
 
 void RGBLED::update() {
     if (millis() > endTime)
         return;
     setColor(OFF);
-    resetTimer();
 }
 
 void RGBLED::resetTimer() {

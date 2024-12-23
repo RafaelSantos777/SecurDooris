@@ -4,12 +4,8 @@ Buzzer::Buzzer(int pin) : pin(pin) {
     pinMode(pin, OUTPUT);
 }
 
-void Buzzer::buzz(int frequency) {
-    tone(pin, frequency);
-}
-
-void Buzzer::buzz(int frequency, long duration) {
-    tone(pin, frequency, duration);
+void Buzzer::buzz(unsigned int frequency, unsigned long duration) {
+    duration > 0 ? tone(pin, frequency, duration) : tone(pin, frequency);
 }
 
 void Buzzer::stop() {

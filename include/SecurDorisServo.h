@@ -9,6 +9,6 @@ private:
     unsigned long endTime;
 public:
     SecurDoorisServo(int pin);
-    void rotate(int degrees, long duration);
+    void rotate(int degrees, unsigned long duration);
     void update();
 };

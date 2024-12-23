@@ -5,7 +5,6 @@ private:
     const int pin;
 public:
     Buzzer(int pin);
-    void buzz(int frequency);
-    void buzz(int frequency, long duration);
+    void buzz(unsigned int frequency, unsigned long duration = 0);
     void stop();
 };

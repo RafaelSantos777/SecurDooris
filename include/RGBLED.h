@@ -9,8 +9,7 @@ private:
     unsigned long endTime;
 public:
     RGBLED(int redPin, int greenPin, int bluePin);
-    void setColor(Color color);
-    void setColor(Color color, long duration);
+    void setColor(Color color, unsigned long duration = 0);
     void update();
     void resetTimer();
 };

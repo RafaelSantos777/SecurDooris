@@ -1,10 +1,11 @@
 #include <SecurDorisServo.h>
+#include <cmath>
 
 SecurDoorisServo::SecurDoorisServo(int pin) {
     attach(pin);
 }
 
-void SecurDoorisServo::rotate(int degrees, long duration) {
+void SecurDoorisServo::rotate(int degrees, unsigned long duration) {
     startDegrees = read();
     endDegrees = degrees;
     startTime = millis();
@@ -15,7 +16,7 @@ void SecurDoorisServo::update() {
     unsigned long currentTime = millis();
     if (currentTime > endTime)
         return;
-    long timeRatio = (currentTime - startTime) / (endTime - startTime);
-    int currentDegrees = startDegrees + (endDegrees - startDegrees) * timeRatio;
+    float timeRatio = (currentTime - startTime) / (endTime - startTime);
+    int currentDegrees = std::round(startDegrees + (endDegrees - startDegrees) * timeRatio);
     write(currentDegrees);
 }
