@@ -10,7 +10,7 @@ void RGBLED::setColor(Color color, unsigned long duration) {
     analogWrite(redPin, color.red);
     analogWrite(greenPin, color.green);
     analogWrite(bluePin, color.blue);
-    endTime = duration > 0 ? millis() + duration : 0;
+    endTime = duration == 0 ? 0 : millis() + duration;
 }
 
 void RGBLED::update() {
