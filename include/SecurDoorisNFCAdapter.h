@@ -1,11 +1,10 @@
 #include "NfcAdapter.h"
 #include "PN532_I2C.h"
-#include <Wire.h>
 
-class SecurDorisNFCAdapter : public NfcAdapter {
+class SecurDoorisNFCAdapter : public NfcAdapter {
 private:
     PN532_I2C pn532_i2c;
 public:
-    SecurDorisNFCAdapter();
+    SecurDoorisNFCAdapter();
     String getTagId();
 };

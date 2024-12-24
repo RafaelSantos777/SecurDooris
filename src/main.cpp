@@ -2,13 +2,13 @@
 #include <Buzzer.h>
 #include <LightSensor.h>
 #include <RGBLED.h>
-#include <SecurDorisNFCAdapter.h>
-#include <SecurDorisServo.h>
+#include <SecurDoorisNFCAdapter.h>
+#include <SecurDoorisServo.h>
 
 Buzzer buzzer(2); // Change pin numbers
 LightSensor lightSensor(A0);
 RGBLED rgbled(4, 5, 6);
-SecurDorisNFCAdapter nfcAdapter;
+SecurDoorisNFCAdapter nfcAdapter;
 SecurDoorisServo servo(8);
 
 // TEMPORARY CODE

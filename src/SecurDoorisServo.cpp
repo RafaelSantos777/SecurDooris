@@ -1,4 +1,4 @@
-#include <SecurDorisServo.h>
+#include <SecurDoorisServo.h>
 #include <cmath>
 
 SecurDoorisServo::SecurDoorisServo(int pin) {
