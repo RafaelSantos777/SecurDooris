@@ -7,7 +7,7 @@
 
 Buzzer buzzer(2); // Change pin numbers
 LightSensor lightSensor(A0);
-RGBLED rgbLed(4, 5, 6);
+RGBLED rgbled(4, 5, 6);
 SecurDorisNFCAdapter nfcAdapter;
 SecurDoorisServo servo(8);
 
@@ -28,8 +28,7 @@ void setup(void) {
 }
 
 void loop() {
-    delay(10);
-    rgbLed.update();
+    rgbled.update();
     servo.update();
     if (areReadingsBlocked() || !nfcAdapter.tagPresent())
         return;
@@ -38,6 +37,7 @@ void loop() {
     Serial.println("NFC Tag ID: " + nfcTagId);
     Serial.println("Lightness %: " + lightSensor.getLightPercentage());
     buzzer.buzz(3000, 5000);
-    rgbLed.setColor(GREEN, 5000);
+    rgbled.setColor(GREEN, 5000);
     servo.rotate(90, 1500);
+    delay(10);
 }
