@@ -23,7 +23,7 @@ bool areReadingsBlocked() {
 }
 // TEMPORARY CODE
 
-void setup(void) {
+void setup() {
     Serial.begin(115200);
 }
 

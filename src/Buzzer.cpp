@@ -5,7 +5,7 @@ Buzzer::Buzzer(int pin) : pin(pin) {
 }
 
 void Buzzer::buzz(unsigned int frequency, unsigned long duration) {
-    duration > 0 ? tone(pin, frequency, duration) : tone(pin, frequency);
+    duration == 0 ? tone(pin, frequency) : tone(pin, frequency, duration);
 }
 
 void Buzzer::stop() {
