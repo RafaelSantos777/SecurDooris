@@ -14,7 +14,7 @@ SecurDoorisServo servo(8);
 // TEMPORARY CODE
 unsigned long blockEndTime = 0;
 
-void blockReadings(long duration) {
+void blockReadings(unsigned long duration) {
     blockEndTime = millis() + duration;
 }
 
@@ -35,7 +35,7 @@ void loop() {
     blockReadings(2000);
     String nfcTagId = nfcAdapter.getTagId();
     Serial.println("NFC Tag ID: " + nfcTagId);
-    Serial.println("Lightness %: " + lightSensor.getLightPercentage());
+    Serial.println("Lightness %: " + (String)lightSensor.getLightPercentage());
     buzzer.buzz(3000, 5000);
     rgbled.setColor(GREEN, 5000);
     servo.rotate(90, 1500);

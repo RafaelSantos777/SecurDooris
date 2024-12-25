@@ -3,11 +3,12 @@
 
 SecurDoorisServo::SecurDoorisServo(int pin) {
     attach(pin);
+    write(0);
 }
 
 void SecurDoorisServo::rotate(int degrees, unsigned long duration) {
     startDegrees = read();
-    endDegrees = degrees;
+    endDegrees = startDegrees + degrees;
     startTime = millis();
     endTime = startTime + duration;
 }
