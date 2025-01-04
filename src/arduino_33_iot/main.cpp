@@ -33,9 +33,9 @@ void loop() {
     if (areReadingsBlocked() || !nfcAdapter.tagPresent())
         return;
     blockReadings(2000);
-    String nfcTagId = nfcAdapter.getTagId();
+    String nfcTagId = nfcAdapter.readTagId();
     Serial.println("NFC Tag ID: " + nfcTagId);
-    Serial.println("Lightness %: " + (String)lightSensor.getLightPercentage());
+    Serial.println("Lightness %: " + (String)lightSensor.readLightPercentage());
     buzzer.buzz(3000, 5000);
     rgbled.setColor(GREEN, 5000);
     servo.rotate(90, 1500);

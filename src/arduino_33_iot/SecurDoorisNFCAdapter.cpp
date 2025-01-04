@@ -5,7 +5,7 @@ SecurDoorisNFCAdapter::SecurDoorisNFCAdapter() : NfcAdapter(pn532_i2c), pn532_i2
     begin();
 }
 
-String SecurDoorisNFCAdapter::getTagId() {
+String SecurDoorisNFCAdapter::readTagId() {
     NfcTag nfcTag = read();
     return nfcTag.getUidString();
 }

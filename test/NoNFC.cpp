@@ -32,7 +32,7 @@ void loop() {
     if (areReadingsBlocked())
         return;
     blockReadings(7000);
-    Serial.println("Lightness %: " + (String)lightSensor.getLightPercentage());
+    Serial.println("Lightness %: " + (String)lightSensor.readLightPercentage());
     buzzer.buzz(1000, 5000);
     rgbled.setColor(GREEN, 5000);
     servo.rotate(90, 1500);
