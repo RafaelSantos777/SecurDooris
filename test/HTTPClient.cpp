@@ -3,8 +3,9 @@
 
 const char* ssid = "Redmi do Pedro";
 const char* password = "ahnaosei";
-const String imageUploadURL = "localhost:1880/upload";
+const String imageUploadURL = "http://192.168.171.210:1880/upload";
 HTTPClient httpClient;
+int count = 0;
 
 void connectToWiFi() {
     WiFi.begin(ssid, password);
@@ -18,13 +19,13 @@ void connectToWiFi() {
 void setup() {
     Serial.begin(115200);
     connectToWiFi();
-    httpClient.begin(imageUploadURL);
 }
 
 void loop() {
-    httpClient.addHeader("Content-Type", "image/jpeg");
-    int httpResponseCode = httpClient.POST("I hecking love Node-RED!");
+    httpClient.begin(imageUploadURL);
+    httpClient.addHeader("Content-Type", "text/plain");
+    int httpResponseCode = httpClient.POST("I hecking love Node-RED!" + count++);
     Serial.printf("HTTP Response code: %d\n", httpResponseCode);
-    //    httpClient.end();
+    httpClient.end();
     delay(5000);
 }
