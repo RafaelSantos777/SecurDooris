@@ -20,4 +20,7 @@
 
 // 4 for flash led or 33 for normal led
 #define LED_GPIO_NUM   4
+#define RXp2 3
+#define TXp2 1
+#define LED 4
 #endif

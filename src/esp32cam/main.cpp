@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include "esp_camera.h"
 #include <WiFi.h>
-#define LED 4
 //
 // WARNING!!! PSRAM IC required for UXGA resolution and high JPEG quality
 //            Ensure ESP32 Wrover Module or other board with PSRAM is selected
