@@ -1,7 +1,6 @@
 #include "HumanSensor.h"
 
 HumanSensor::HumanSensor(float sensitivity, int detectInterval) :PresenceDetector(movementSensor, sensitivity, 10.0, detectInterval) {
-
 }
 
 // mandatory to be in setup for human sensor to work
@@ -29,4 +28,3 @@ bool HumanSensor::detectHuman(int minimumSensorsDetect) {
     }
     return detected >= minimumSensorsDetect;
 }
-

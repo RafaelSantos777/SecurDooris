@@ -1,6 +1,5 @@
 #include <Camera.h>
 
-
 void Camera::begin() {
     Serial.println("Camera Setup - Starting...");
     config.ledc_channel = LEDC_CHANNEL_0;
@@ -71,5 +70,3 @@ void Camera::uploadPhoto(String url) {
     esp_camera_fb_return(frameBuffer);
     httpClient.end();
 }
-
-
