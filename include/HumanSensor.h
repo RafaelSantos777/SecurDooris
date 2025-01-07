@@ -9,9 +9,9 @@ public:
     bool detectHuman(int minimum_sensors_detect = DEFAULT_MINIMUM_SENSORS_DETECT);
 
 private:
-    static const float DEFAULT_PRESENCE_SENSITIVITY = 5.0;
-    static const int DEFAULT_DETECT_INTERVAL = 50;
-    static const int DEFAULT_MINIMUM_SENSORS_DETECT = 2;
+    static constexpr float DEFAULT_PRESENCE_SENSITIVITY = 5.0;
+    static constexpr int DEFAULT_DETECT_INTERVAL = 50;
+    static constexpr int DEFAULT_MINIMUM_SENSORS_DETECT = 2;
     AK9753 movementSensor;
     unsigned long lastTime;
 };

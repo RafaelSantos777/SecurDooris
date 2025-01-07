@@ -17,7 +17,9 @@ void connectToWiFi() {
 }
 
 void setup() {
+    delay(7000);
     Serial.begin(115200);
+    Serial.println("Arduino Nano 33 IoT - Started");
     connectToWiFi();
     httpClient.begin(imageUploadURL);
 }

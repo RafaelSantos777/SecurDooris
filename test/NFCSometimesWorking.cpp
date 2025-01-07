@@ -6,7 +6,9 @@
 PN532_I2C pn532_i2c(Wire);
 NfcAdapter nfc = NfcAdapter(pn532_i2c);
 void setup() {
+    delay(7000);
     Serial.begin(115200);
+    Serial.println("Arduino Nano 33 IoT - Started");
     nfc.begin();
 }
 

@@ -24,10 +24,11 @@ bool areReadingsBlocked() {
 // TEMPORARY CODE
 
 void setup() {
-    delay(5000);
+    delay(7000);
     Serial.begin(115200);
+    Serial.println("Arduino Nano 33 IoT - Started");
 
-    humanSensor.beginAndWire(); // mandatory for human sensor to work
+    humanSensor.begin(); // mandatory for human sensor to work
 }
 
 void loop() {
@@ -36,7 +37,7 @@ void loop() {
     if (areReadingsBlocked())
         return;
     blockReadings(7000);
-    if (humanSensor.humanDetected())
+    if (humanSensor.detectHuman())
     {
         Serial.println("Sensor found human");
     }
