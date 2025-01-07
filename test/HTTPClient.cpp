@@ -19,13 +19,12 @@ void connectToWiFi() {
 void setup() {
     Serial.begin(115200);
     connectToWiFi();
+    httpClient.begin(imageUploadURL);
 }
 
 void loop() {
-    httpClient.begin(imageUploadURL);
     httpClient.addHeader("Content-Type", "text/plain");
-    int httpResponseCode = httpClient.POST("I hecking love Node-RED!" + count++);
+    int httpResponseCode = httpClient.POST("I hecking love Node-RED!" + String(count++));
     Serial.printf("HTTP Response code: %d\n", httpResponseCode);
-    httpClient.end();
-    delay(5000);
+    delay(500);
 }

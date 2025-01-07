@@ -2,11 +2,13 @@
 #include <Buzzer.h>
 #include <LightSensor.h>
 #include <RGBLED.h>
+#include <HumanSensor.h>
 #include <SecurDoorisServo.h>
 
 Buzzer buzzer(2); // Change pin numbers
 LightSensor lightSensor(A0);
 RGBLED rgbled(4, 5, 6);
+HumanSensor humanSensor;
 SecurDoorisServo servo(8);
 
 // TEMPORARY CODE
@@ -24,6 +26,8 @@ bool areReadingsBlocked() {
 void setup() {
     delay(5000);
     Serial.begin(115200);
+
+    humanSensor.beginAndWire(); // mandatory for human sensor to work
 }
 
 void loop() {
@@ -32,6 +36,13 @@ void loop() {
     if (areReadingsBlocked())
         return;
     blockReadings(7000);
+    if (humanSensor.humanDetected())
+    {
+        Serial.println("Sensor found human");
+    }
+    else {
+        Serial.println("found nothing");
+    }
     Serial.println("Lightness %: " + (String)lightSensor.readLightPercentage());
     buzzer.buzz(1000, 5000);
     rgbled.setColor(GREEN, 5000);

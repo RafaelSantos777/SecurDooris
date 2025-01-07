@@ -2,12 +2,14 @@
 #include <Buzzer.h>
 #include <LightSensor.h>
 #include <RGBLED.h>
+#include <HumanSensor.h>
 #include <SecurDoorisNFCAdapter.h>
 #include <SecurDoorisServo.h>
 
 Buzzer buzzer(2); // Change pin numbers
 LightSensor lightSensor(A0);
 RGBLED rgbled(4, 5, 6);
+HumanSensor humanSensor;
 SecurDoorisNFCAdapter nfcAdapter;
 SecurDoorisServo servo(8);
 
@@ -25,6 +27,7 @@ bool areReadingsBlocked() {
 
 void setup() {
     Serial.begin(115200);
+    humanSensor.beginAndWire(); // mandatory for human sensor to work
 }
 
 void loop() {
@@ -33,6 +36,13 @@ void loop() {
     if (areReadingsBlocked() || !nfcAdapter.tagPresent())
         return;
     blockReadings(2000);
+    if (humanSensor.humanDetected())
+    {
+        Serial.println("Sensor found human");
+    }
+    else {
+        Serial.println("found nothing");
+    }
     String nfcTagId = nfcAdapter.readTagId();
     Serial.println("NFC Tag ID: " + nfcTagId);
     Serial.println("Lightness %: " + (String)lightSensor.readLightPercentage());
