@@ -6,12 +6,12 @@ HumanSensor humanSensor;
 
 void setup() {
     Serial.begin(115200);
-    humanSensor.beginAndWire(); // mandatory for human sensor to work
+    humanSensor.begin(); // mandatory for human sensor to work
 
 }
 
 void loop() {
-    if (humanSensor.humanDetected())
+    if (humanSensor.detectHuman())
     {
         Serial.println("Sensor found human");
     }
