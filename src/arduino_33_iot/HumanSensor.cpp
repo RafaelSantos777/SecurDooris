@@ -1,7 +1,7 @@
 #include "HumanSensor.h"
 
 HumanSensor::HumanSensor(float sensitivity, int detectInterval) :PresenceDetector(movementSensor, sensitivity, 10.0, detectInterval) {
-    lastTime = millis();
+
 }
 
 // mandatory to be in setup for human sensor to work
@@ -11,6 +11,7 @@ void HumanSensor::begin() {
         Serial.println("Human Presence Sensor not found. Check wiring.");
         while (true);
     }
+    lastTime = millis();
     loop();
 }
 

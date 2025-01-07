@@ -19,6 +19,7 @@ void connectToWiFi() {
 
 void setup() {
     Serial.begin(115200);
+    camera.begin();
     connectToWiFi();
 }
 

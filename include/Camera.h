@@ -4,7 +4,7 @@
 
 class Camera {
 public:
-    Camera();
+    void begin();
     void turnOnLight();
     void turnOffLight();
     void uploadPhoto(String url);
@@ -30,4 +30,5 @@ private:
     static const int TXp2 = 1;
     static const int LED_PIN = 4;
     HTTPClient httpClient;
+    camera_config_t config;
 };
