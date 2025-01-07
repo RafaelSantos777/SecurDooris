@@ -31,4 +31,3 @@ bool HumanSensor::detectHuman(int minimumSensorsDetect) {
     }
     return detected >= minimumSensorsDetect;
 }
-
