@@ -29,7 +29,7 @@ bool areReadingsBlocked() {
 // TEMPORARY CODE
 
 void updateCameraLight() {
-    static int isCameraLightOn = false;
+    static bool isCameraLightOn = false;
     static int CAMERA_LIGHT_ACTIVATION_THRESHOLD = 40;
     if (lightSensor.readLightPercentage() <= CAMERA_LIGHT_ACTIVATION_THRESHOLD && !isCameraLightOn) {
         cameraSerial.write(TURN_ON_LIGHT);
