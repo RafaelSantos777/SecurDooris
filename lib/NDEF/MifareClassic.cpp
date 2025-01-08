@@ -32,7 +32,7 @@ NfcTag MifareClassic::read(byte* uid, unsigned int uidLength)
         if (success)
         {
             if (!decodeTlv(data, messageLength, messageStartIndex)) {
-                return NfcTag(uid, uidLength, "ERROR"); // TODO should the error message go in NfcTag?
+                return NfcTag(uid, uidLength, "ERROR"); // should the error message go in NfcTag?
             }
         }
         else
@@ -44,7 +44,7 @@ NfcTag MifareClassic::read(byte* uid, unsigned int uidLength)
     else
     {
         Serial.println(F("Tag is not NDEF formatted."));
-        // TODO set tag.isFormatted = false
+        // set tag.isFormatted = false
         return NfcTag(uid, uidLength, MIFARE_CLASSIC);
     }
 
@@ -68,7 +68,7 @@ NfcTag MifareClassic::read(byte* uid, unsigned int uidLength)
             if (!success)
             {
                 Serial.print(F("Error. Block Authentication failed for "));Serial.println(currentBlock);
-                // TODO error handling
+                // error handling
             }
         }
 
@@ -84,7 +84,7 @@ NfcTag MifareClassic::read(byte* uid, unsigned int uidLength)
         else
         {
             Serial.print(F("Read failed "));Serial.println(currentBlock);
-            // TODO handle errors here
+            // handle errors here
         }
 
         index += BLOCK_SIZE;
