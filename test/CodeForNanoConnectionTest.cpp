@@ -8,14 +8,15 @@ void setup() {
   Serial1.begin(9600);            // initialize UART with baud rate of 9600
 }
 void loop() {
-  if (Serial.read() == 1) {
+  if (Serial.read() == '1') {
     Serial1.print("amogus");
     digitalWrite(LED_BUILTIN, HIGH);
     Serial.println("LEDS ON");
   }
-  else if (Serial.read() == 0) {
+  else if (Serial.read() == '0') {
     Serial1.print("sus");
     digitalWrite(LED_BUILTIN, LOW);
     Serial.println("LEDS OFF");
   }
+  delay(100);
 }
