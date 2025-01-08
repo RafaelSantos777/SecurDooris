@@ -30,7 +30,7 @@ bool areReadingsBlocked() {
 
 void updateCameraLight() {
     static bool isCameraLightOn = false;
-    static int CAMERA_LIGHT_ACTIVATION_THRESHOLD = 40;
+    static const int CAMERA_LIGHT_ACTIVATION_THRESHOLD = 40;
     if (lightSensor.readLightPercentage() <= CAMERA_LIGHT_ACTIVATION_THRESHOLD && !isCameraLightOn) {
         cameraSerial.write(TURN_ON_LIGHT);
         isCameraLightOn = false;
@@ -55,7 +55,7 @@ void loop() {
     updateCameraLight();
     if (areReadingsBlocked() || !nfcAdapter.tagPresent())
         return;
-    blockReadings(2000);
+    blockReadings(7000);
     if (humanSensor.detectHuman())
         Serial.println("Sensor found human");
     else
