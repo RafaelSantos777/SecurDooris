@@ -25,6 +25,8 @@ void setup() {
 }
 
 void loop() {
-    camera.uploadPhoto(uploadHandURL);
+    int httpCode = camera.uploadPhoto(uploadHandURL);
+    if (httpCode != HTTP_CODE_OK)
+        Serial.printf("Hand photo upload unsuccessful. HTTP code: %d\n", httpCode);
     delay(5000);
 }

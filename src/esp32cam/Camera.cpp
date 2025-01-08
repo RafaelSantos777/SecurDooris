@@ -47,7 +47,7 @@ void Camera::begin() {
 
     esp_err_t err = esp_camera_init(&config);
     if (err != ESP_OK) {
-        Serial.printf("Camera init failed with error 0x%x", err);
+        Serial.printf("Camera init failed with error 0x%x\n", err);
         while (true);
     }
     pinMode(LED_PIN, OUTPUT);
@@ -62,11 +62,12 @@ void Camera::turnOffLight() {
     digitalWrite(LED_PIN, LOW);
 }
 
-void Camera::uploadPhoto(String url) {
+int Camera::uploadPhoto(String url) {
     httpClient.begin(url);
     httpClient.addHeader("Content-Type", "image/jpeg");
     camera_fb_t* frameBuffer = esp_camera_fb_get();
-    httpClient.POST(frameBuffer->buf, frameBuffer->len);
+    int httpCode = httpClient.POST(frameBuffer->buf, frameBuffer->len);
     esp_camera_fb_return(frameBuffer);
     httpClient.end();
+    return httpCode;
 }
