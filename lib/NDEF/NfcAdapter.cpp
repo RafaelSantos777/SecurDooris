@@ -130,7 +130,7 @@ NfcTag NfcAdapter::read()
     else
     {
         Serial.print(F("No driver for card type "));Serial.println(type);
-        // TODO should set type here
+        // should set type here
         return NfcTag(uid, uidLength);
     }
 
@@ -171,7 +171,7 @@ boolean NfcAdapter::write(NdefMessage& ndefMessage)
     return success;
 }
 
-// TODO this should return a Driver MifareClassic, MifareUltralight, Type 4, Unknown
+// this should return a Driver MifareClassic, MifareUltralight, Type 4, Unknown
 // Guess Tag Type by looking at the ATQA and SAK values
 // Need to follow spec for Card Identification. Maybe AN1303, AN1305 and ???
 unsigned int NfcAdapter::guessTagType()

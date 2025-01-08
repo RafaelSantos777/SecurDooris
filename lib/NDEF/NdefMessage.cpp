@@ -105,7 +105,7 @@ NdefMessage& NdefMessage::operator=(const NdefMessage& rhs)
         // delete existing records
         for (int i = 0; i < _recordCount; i++)
         {
-            // TODO Dave: is this the right way to delete existing records?
+            // Dave: is this the right way to delete existing records?
             _records[i] = NdefRecord();
         }
 
@@ -133,7 +133,7 @@ int NdefMessage::getEncodedSize()
     return size;
 }
 
-// TODO change this to return uint8_t*
+// change this to return uint8_t*
 void NdefMessage::encode(uint8_t* data)
 {
     // assert sizeof(data) >= getEncodedSize()
@@ -142,7 +142,7 @@ void NdefMessage::encode(uint8_t* data)
     for (int i = 0; i < _recordCount; i++)
     {
         _records[i].encode(data_ptr, i == 0, (i + 1) == _recordCount);
-        // TODO can NdefRecord.encode return the record size?
+        // can NdefRecord.encode return the record size?
         data_ptr += _records[i].getEncodedSize();
     }
 
@@ -197,11 +197,11 @@ void NdefMessage::addTextRecord(String text, String encoding)
     NdefRecord r = NdefRecord();
     r.setTnf(TNF_WELL_KNOWN);
 
-    uint8_t RTD_TEXT[1] = { 0x54 }; // TODO this should be a constant or preprocessor
+    uint8_t RTD_TEXT[1] = { 0x54 }; // this should be a constant or preprocessor
     r.setType(RTD_TEXT, sizeof(RTD_TEXT));
 
     // X is a placeholder for encoding length
-    // TODO is it more efficient to build w/o string concatenation?
+    // is it more efficient to build w/o string concatenation?
     String payloadString = "X" + encoding + text;
 
     byte payload[payloadString.length() + 1];
@@ -220,7 +220,7 @@ void NdefMessage::addUriRecord(String uri)
     NdefRecord* r = new NdefRecord();
     r->setTnf(TNF_WELL_KNOWN);
 
-    uint8_t RTD_URI[1] = { 0x55 }; // TODO this should be a constant or preprocessor
+    uint8_t RTD_URI[1] = { 0x55 }; // this should be a constant or preprocessor
     r->setType(RTD_URI, sizeof(RTD_URI));
 
     // X is a placeholder for identifier code

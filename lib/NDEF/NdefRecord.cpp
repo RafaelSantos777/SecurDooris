@@ -44,7 +44,7 @@ NdefRecord::NdefRecord(const NdefRecord& rhs)
 
 }
 
-// TODO NdefRecord::NdefRecord(tnf, type, payload, id)
+// NdefRecord::NdefRecord(tnf, type, payload, id)
 
 NdefRecord::~NdefRecord()
 {
@@ -341,7 +341,7 @@ void NdefRecord::print()
         Serial.print(F("    Id Length 0x"));Serial.println(_idLength, HEX);
     }
     Serial.print(F("    Type "));PrintHexChar(_type, _typeLength);
-    // TODO chunk large payloads so this is readable
+    // chunk large payloads so this is readable
     Serial.print(F("    Payload "));PrintHexChar(_payload, _payloadLength);
     if (_idLength)
     {
