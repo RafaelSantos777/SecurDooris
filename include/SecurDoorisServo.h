@@ -1,4 +1,3 @@
-#include <Arduino.h>
 #include <Servo.h>
 
 class SecurDoorisServo : public Servo {

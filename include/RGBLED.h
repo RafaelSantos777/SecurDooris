@@ -1,4 +1,3 @@
-#include <Arduino.h>
 #include <Color.h>
 
 class RGBLED {

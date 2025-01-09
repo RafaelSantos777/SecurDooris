@@ -1,4 +1,5 @@
 #include <LightSensor.h>
+#include <Arduino.h>
 
 LightSensor::LightSensor(int pin) : pin(pin) {
 }

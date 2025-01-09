@@ -1,4 +1,5 @@
 #include <SecurDoorisServo.h>
+#include <Arduino.h>
 #include <cmath>
 
 SecurDoorisServo::SecurDoorisServo(int pin) {

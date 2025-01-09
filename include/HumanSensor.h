@@ -1,4 +1,3 @@
-#include <Arduino.h>
 #include "Grove_Human_Presence_Sensor.h"
 
 class HumanSensor : public PresenceDetector {

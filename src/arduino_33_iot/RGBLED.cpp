@@ -1,4 +1,5 @@
 #include <RGBLED.h>
+#include <Arduino.h>
 
 RGBLED::RGBLED(int redPin, int greenPin, int bluePin) : redPin(redPin), greenPin(greenPin), bluePin(bluePin) {
     pinMode(redPin, OUTPUT);

@@ -5,16 +5,14 @@
 #include <HumanSensor.h>
 #include <SecurDoorisNFCAdapter.h>
 #include <SecurDoorisServo.h>
-#include <SoftwareSerial.h>
-#include <BoardCommunicationCommands.h>
+#include <Communication.h>
 
-Buzzer buzzer(2); // Change pin numbers
+Buzzer buzzer(2);
 LightSensor lightSensor(A0);
 RGBLED rgbled(4, 5, 6);
 HumanSensor humanSensor;
 SecurDoorisNFCAdapter nfcAdapter;
 SecurDoorisServo servo(8);
-SoftwareSerial cameraSerial(10, 11); // RX, TX pins for SoftwareSerial
 
 // TODO TEMPORARY CODE
 unsigned long blockEndTime = 0;
@@ -32,21 +30,22 @@ void updateCameraLight() {
     static bool isCameraLightOn = false;
     static const int CAMERA_LIGHT_ACTIVATION_THRESHOLD = 40;
     if (lightSensor.readLightPercentage() <= CAMERA_LIGHT_ACTIVATION_THRESHOLD && !isCameraLightOn) {
-        cameraSerial.write(TURN_ON_LIGHT);
+        sendMQTTMessage(TURN_ON_LIGHT, BOARD_COMMUNICATION_TOPIC);
         isCameraLightOn = false;
     }
     else if (lightSensor.readLightPercentage() > CAMERA_LIGHT_ACTIVATION_THRESHOLD && isCameraLightOn) {
-        cameraSerial.write(TURN_OFF_LIGHT);
+        sendMQTTMessage(TURN_OFF_LIGHT, BOARD_COMMUNICATION_TOPIC);
         isCameraLightOn = true;
     }
 }
 
 void setup() {
     delay(7000);
-    Serial.begin(115200);
+    Serial.begin(9600);
     Serial.println("Arduino Nano 33 IoT - Started");
-    cameraSerial.begin(115200);
-    humanSensor.begin(); // mandatory for human sensor to work
+    connectToWifi();
+    connectToMQTTClient();
+    humanSensor.begin();
 }
 
 void loop() {
