@@ -2,17 +2,20 @@
 #include <Communication.h>
 
 Camera camera;
+const String UPLOAD_HAND_URL = "http://192.168.171.210:1880/upload_hand";
+const String UPLOAD_INTRUDER_URL = "http://192.168.171.210:1880/upload_intruder";
 
 void setup() {
     Serial.begin(9600);
     Serial.println("ESP32 CAM - Started");
     camera.begin();
-    connectToWifi();
+    connectToWiFi();
     connectToMQTTClient();
     mqttClient.subscribe(BOARD_COMMUNICATION_TOPIC, DEFAULT_MQTT_QOS);
 }
 
 void loop() {
+    mqttClient.poll();
     switch (mqttClient.read()) {
         int httpCode;
     case -1:

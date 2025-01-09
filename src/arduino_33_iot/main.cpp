@@ -43,7 +43,7 @@ void setup() {
     delay(7000);
     Serial.begin(9600);
     Serial.println("Arduino Nano 33 IoT - Started");
-    connectToWifi();
+    connectToWiFi();
     connectToMQTTClient();
     humanSensor.begin();
 }
@@ -52,6 +52,7 @@ void loop() {
     rgbled.update();
     servo.update();
     updateCameraLight();
+    mqttClient.poll();
     if (areReadingsBlocked() || !nfcAdapter.tagPresent())
         return;
     blockReadings(7000);
