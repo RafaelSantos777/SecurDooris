@@ -9,7 +9,7 @@ MqttClient mqttClient(new WiFiClient());
 
 const char* WIFI_SSID = "Redmi do Pedro";
 const char* WIFI_PASSWORD = "ahnaosei";
-const char MQTT_BROKER[] = "?????"; // TODO
+const char* MQTT_BROKER = "?????"; // TODO
 const int MQTT_PORT = 1883;
 
 void connectToWiFi() {
