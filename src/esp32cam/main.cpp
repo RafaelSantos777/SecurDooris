@@ -1,5 +1,6 @@
 #include <Camera.h>
-#include <Communication.h>
+#include <InternetCommunication.h>
+#include <BoardCommands.h>
 
 Camera camera;
 const String UPLOAD_HAND_URL = "http://192.168.171.210:1880/upload_hand";
@@ -10,14 +11,11 @@ void setup() {
     Serial.println("ESP32 CAM - Started");
     camera.begin();
     connectToWiFi();
-    connectToMQTTClient();
-    mqttClient.subscribe(BOARD_COMMUNICATION_TOPIC, DEFAULT_MQTT_QOS);
 }
 
 void loop() {
-    mqttClient.poll();
-    switch (mqttClient.read()) {
-        int httpCode;
+    int httpCode;
+    switch (Serial1.read()) {
     case -1:
         break;
     case TURN_ON_LIGHT:

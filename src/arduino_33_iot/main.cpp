@@ -5,7 +5,8 @@
 #include <HumanSensor.h>
 #include <SecurDoorisNFCAdapter.h>
 #include <SecurDoorisServo.h>
-#include <Communication.h>
+#include <InternetCommunication.h>
+#include <BoardCommands.h>
 
 Buzzer buzzer(2);
 LightSensor lightSensor(A0);
@@ -13,6 +14,9 @@ RGBLED rgbled(4, 5, 6);
 HumanSensor humanSensor;
 SecurDoorisNFCAdapter nfcAdapter;
 SecurDoorisServo servo(8);
+SecurDoorisMQTTClient mqttClient;
+
+const char* MQTT_BROKER = "?????"; // TODO
 
 // TODO TEMPORARY CODE
 unsigned long blockEndTime = 0;
@@ -30,11 +34,11 @@ void updateCameraLight() {
     static bool isCameraLightOn = false;
     static const int CAMERA_LIGHT_ACTIVATION_THRESHOLD = 40;
     if (lightSensor.readLightPercentage() <= CAMERA_LIGHT_ACTIVATION_THRESHOLD && !isCameraLightOn) {
-        sendMQTTMessage(TURN_ON_LIGHT, BOARD_COMMUNICATION_TOPIC);
+        Serial1.write(TURN_ON_LIGHT);
         isCameraLightOn = false;
     }
     else if (lightSensor.readLightPercentage() > CAMERA_LIGHT_ACTIVATION_THRESHOLD && isCameraLightOn) {
-        sendMQTTMessage(TURN_OFF_LIGHT, BOARD_COMMUNICATION_TOPIC);
+        Serial1.write(TURN_OFF_LIGHT);
         isCameraLightOn = true;
     }
 }
@@ -44,7 +48,7 @@ void setup() {
     Serial.begin(9600);
     Serial.println("Arduino Nano 33 IoT - Started");
     connectToWiFi();
-    connectToMQTTClient();
+    mqttClient.connect(MQTT_BROKER);
     humanSensor.begin();
 }
 

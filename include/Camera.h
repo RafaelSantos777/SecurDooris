@@ -3,11 +3,13 @@
 #include <HTTPClient.h>
 
 class Camera {
+
 public:
     void begin();
     void turnOnLight();
     void turnOffLight();
     int uploadPhoto(String url);
+
 private:
     static const int PWDN_GPIO_NUM = 32;
     static const int RESET_GPIO_NUM = -1;
