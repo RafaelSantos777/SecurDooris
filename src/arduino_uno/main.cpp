@@ -53,6 +53,7 @@ void setup() {
     // mqttClient.connect(MQTT_BROKER);
     humanSensor.begin();
     nfc.begin(false);
+    servo.begin();
 }
 
 void loop() {

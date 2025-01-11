@@ -1,7 +1,6 @@
 #include "HumanSensor.h"
 
-HumanSensor::HumanSensor(float sensitivity, int detectInterval) :PresenceDetector(movementSensor, sensitivity, 10.0, detectInterval) {
-}
+HumanSensor::HumanSensor(float sensitivity, int detectInterval) :PresenceDetector(movementSensor, sensitivity, 10.0, detectInterval) {}
 
 // mandatory to be in setup for human sensor to work
 void HumanSensor::begin() {

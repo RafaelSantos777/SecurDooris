@@ -2,9 +2,13 @@
 #include <Arduino.h>
 #include <math.h>
 
-SecurDoorisServo::SecurDoorisServo(int pin) {
+SecurDoorisServo::SecurDoorisServo(int pin) : pin(pin) {}
+
+void SecurDoorisServo::begin() {
+    Serial.println("Servo Motor - Starting...");
     attach(pin);
-    write(0);
+    write(0);//TODO make sure this is diferent from the open door position
+    Serial.println("Servo Motor - Done");
 }
 
 void SecurDoorisServo::rotate(int degrees, unsigned long duration) {
@@ -16,9 +20,11 @@ void SecurDoorisServo::rotate(int degrees, unsigned long duration) {
 
 void SecurDoorisServo::update() {
     unsigned long currentTime = millis();
-    if (currentTime > endTime)
+    if (currentTime > endTime) {
+        Serial.println("less");
         return;
-    float timeRatio = (currentTime - startTime) / (endTime - startTime);
+    }
+    float timeRatio = ((float)currentTime - startTime) / (endTime - startTime);//
     int currentDegrees = round(startDegrees + (endDegrees - startDegrees) * timeRatio);
     write(currentDegrees);
 }
