@@ -16,7 +16,7 @@ void loop() {
     Serial.println("\nScan a NFC tag\n");
     if (nfc.tagPresent()) {
         NfcTag tag = nfc.read();
-        tag.print();
+        Serial.println(tag.getUidString());
     }
     delay(5000);
 }
