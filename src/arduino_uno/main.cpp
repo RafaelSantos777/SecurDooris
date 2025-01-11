@@ -47,12 +47,16 @@ void updateCameraLight() {
 void setup() {
     delay(3000);
     Serial.begin(115200);
+    Serial.println("Buzzer, Light Sensor and LED - Started");
     Serial.println("Arduino Uno - Started");
     connectToWiFi();
     mqttClient.connect(MQTT_BROKER);
     humanSensor.begin();
+    Serial.println("NFC Adapter - Starting...");
     nfc.begin(false);
+    Serial.println("NFC Adapter - Started");
     servo.begin();
+    Serial.println("Arduino Uno - Finished Setup");
 }
 
 void loop() {
