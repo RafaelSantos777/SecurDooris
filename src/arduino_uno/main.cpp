@@ -50,6 +50,7 @@ void setup() {
     connectToWiFi();
     mqttClient.connect(MQTT_BROKER);
     humanSensor.begin();
+    nfcAdapter.begin();
 }
 
 void loop() {

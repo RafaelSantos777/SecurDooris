@@ -1,6 +1,6 @@
 #include <SecurDoorisServo.h>
 #include <Arduino.h>
-#include <cmath>
+#include <math.h>
 
 SecurDoorisServo::SecurDoorisServo(int pin) {
     attach(pin);
@@ -19,6 +19,6 @@ void SecurDoorisServo::update() {
     if (currentTime > endTime)
         return;
     float timeRatio = (currentTime - startTime) / (endTime - startTime);
-    int currentDegrees = std::round(startDegrees + (endDegrees - startDegrees) * timeRatio);
+    int currentDegrees = round(startDegrees + (endDegrees - startDegrees) * timeRatio);
     write(currentDegrees);
 }
