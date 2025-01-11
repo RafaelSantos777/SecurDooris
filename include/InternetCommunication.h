@@ -1,12 +1,15 @@
 #include <ArduinoMqttClient.h>
-#if defined(ARDUINO_SAMD_NANO_33_IOT)
-#include <WiFiNINA.h>
+#if defined(ARDUINO_AVR_UNO)
+#include <UnoWiFi.h>
 #elif defined(ARDUINO_ARCH_ESP32)
 #include <WiFi.h>
 #endif
 
-const char* WIFI_SSID = "Redmi do Pedro";
-const char* WIFI_PASSWORD = "ahnaosei";
+
+const char WIFI_SSID[] = "Redmi do Pedro";
+const char WIFI_PASSWORD[] = "ahnaosei";
+
+const char MQTT_BROKER[] = "?????"; // TODO
 
 void connectToWiFi();
 
@@ -14,7 +17,7 @@ class SecurDoorisMQTTClient : public MqttClient {
 
 public:
     SecurDoorisMQTTClient();
-    void connect(const char* broker, int port = DEFAULT_PORT);
+    void connect(const char broker[], int port = DEFAULT_PORT);
     void sendMessage(String message, String topic, int qos = DEFAULT_QOS);
 
 private:
