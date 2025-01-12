@@ -63,9 +63,9 @@ void Camera::turnOffLight() {
 }
 
 int Camera::uploadPhoto(String url) {
+    camera_fb_t* frameBuffer = esp_camera_fb_get();
     httpClient.begin(url);
     httpClient.addHeader("Content-Type", "image/jpeg");
-    camera_fb_t* frameBuffer = esp_camera_fb_get();
     int httpCode = httpClient.POST(frameBuffer->buf, frameBuffer->len);
     esp_camera_fb_return(frameBuffer);
     httpClient.end();

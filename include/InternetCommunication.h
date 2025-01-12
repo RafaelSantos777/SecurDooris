@@ -6,8 +6,9 @@
 #endif
 
 
-const char WIFI_SSID[] = "Redmi do Pedro";
-const char WIFI_PASSWORD[] = "ahnaosei";
+inline char* WIFI_SSID = "Redmi do Pedro";
+inline char* WIFI_PASSWORD = "ahnaosei";
+
 
 const char MQTT_BROKER[] = "f9bb39c5d7f044479e71d6922c6992e7.s1.eu.hivemq.cloud"; // TODO
 

@@ -1,7 +1,5 @@
 #include <InternetCommunication.h>
-
-SecurDoorisMQTTClient::SecurDoorisMQTTClient() : MqttClient(wifiClient) {
-}
+SecurDoorisMQTTClient::SecurDoorisMQTTClient() : MqttClient(wifiClient) {}
 
 void SecurDoorisMQTTClient::connect(const char broker[], int port) {
     Serial.println("Connecting to MQTT Client");

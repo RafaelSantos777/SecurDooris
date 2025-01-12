@@ -1,22 +1,24 @@
 #include <Arduino.h>
-#define LED 4
+#include <RGBLED.h>
+RGBLED rgbled(4, 5, 6);
 
 void setup() {
     Serial.begin(9600);
-    Serial1.begin(9600);
-    pinMode(LED, OUTPUT);
-    digitalWrite(LED, LOW);
+    rgbled.setColor(OFF);
 }
 void loop() {
-    Serial.println(Serial1.available());
-    if (Serial1.available()) {
-        String receivedData = Serial1.readString();
-        Serial.println(receivedData);
-        if (receivedData == "on")
-            digitalWrite(LED, HIGH);
-        else if (receivedData == "off")
-            digitalWrite(LED, LOW);
 
+    if (Serial.available()) {
+        String receivedData = Serial.readString();
+        if (receivedData == "on")
+            rgbled.setColor(GREEN);
+        else if (receivedData == "off")
+            rgbled.setColor(RED);
     }
-    delay(100);
+    else {
+        rgbled.setColor(BLUE);
+        delay(100);
+        rgbled.setColor(OFF);
+    }
+    delay(500);
 }
