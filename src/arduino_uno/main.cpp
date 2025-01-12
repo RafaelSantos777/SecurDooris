@@ -35,11 +35,11 @@ void updateCameraLight() {
     static bool isCameraLightOn = false;
     static const int CAMERA_LIGHT_ACTIVATION_THRESHOLD = 40;
     if (lightSensor.readLightPercentage() <= CAMERA_LIGHT_ACTIVATION_THRESHOLD && !isCameraLightOn) {
-        // Serial1.write(TURN_ON_LIGHT);
+        mqttClient.sendMessage("Turn on camera light", "camera/light");
         isCameraLightOn = false;
     }
     else if (lightSensor.readLightPercentage() > CAMERA_LIGHT_ACTIVATION_THRESHOLD && isCameraLightOn) {
-        // Serial1.write(TURN_OFF_LIGHT);
+        mqttClient.sendMessage("Turn on camera light", "camera/light");
         isCameraLightOn = true;
     }
 }

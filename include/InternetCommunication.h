@@ -9,7 +9,10 @@
 const char WIFI_SSID[] = "Redmi do Pedro";
 const char WIFI_PASSWORD[] = "ahnaosei";
 
-const char MQTT_BROKER[] = "?????"; // TODO
+const char MQTT_BROKER[] = "f9bb39c5d7f044479e71d6922c6992e7.s1.eu.hivemq.cloud"; // TODO
+
+const String mqtt_user = "wo";       //write only access broker
+const String mqtt_password = "writeonly";
 
 void connectToWiFi();
 
@@ -21,7 +24,7 @@ public:
     void sendMessage(String message, String topic, int qos = DEFAULT_QOS);
 
 private:
-    static constexpr int DEFAULT_QOS = 1;
-    static constexpr int DEFAULT_PORT = 1883;
+    static constexpr int DEFAULT_QOS = 2;
+    static constexpr int DEFAULT_PORT = 8883;
     WiFiClient wifiClient;
 };
