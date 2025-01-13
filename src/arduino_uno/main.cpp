@@ -5,18 +5,16 @@
 #include <HumanSensor.h>
 #include <SecurDoorisNFCAdapter.h>
 #include <SecurDoorisServo.h>
-#include <InternetCommunication.h>
 #include <BoardCommands.h>
 
 
 const int DEFAULT_MINIMUM_DELAY_TIME = 50;
 Buzzer buzzer(2);
 LightSensor lightSensor(A0); // 5V
-RGBLED rgbled(4, 5, 6); // R G(far gnd) B(side G)
+RGBLED rgbled(3, 5, 6); // R G(far gnd) B(side G)
 HumanSensor humanSensor; // 3.3V or 5V
 NfcAdapter nfc(pn532_i2c); // 3.3V or 5V, SCL(A5), SDA(A4)
 SecurDoorisServo servo(8); // 5V
-SecurDoorisMQTTClient mqttClient;
 
 
 // TODO TEMPORARY CODE
@@ -35,58 +33,49 @@ void updateCameraLight() {
     static bool isCameraLightOn = false;
     static const int CAMERA_LIGHT_ACTIVATION_THRESHOLD = 40;
     if (lightSensor.readLightPercentage() <= CAMERA_LIGHT_ACTIVATION_THRESHOLD && !isCameraLightOn) {
-        mqttClient.sendMessage("Turn on camera light", "camera/light");
-        isCameraLightOn = false;
+        Serial.print(TURN_ON_LIGHT);
+        isCameraLightOn = true;
     }
     else if (lightSensor.readLightPercentage() > CAMERA_LIGHT_ACTIVATION_THRESHOLD && isCameraLightOn) {
-        mqttClient.sendMessage("Turn on camera light", "camera/light");
-        isCameraLightOn = true;
+        Serial.print(TURN_OFF_LIGHT);
+        isCameraLightOn = false;
     }
 }
 
 void setup() {
     delay(3000);
-    Serial.begin(115200);
+    Serial.begin(9600);
     Serial.println("Buzzer, Light Sensor and LED - Started");
-    Serial.println("Arduino Uno - Started");
-    connectToWiFi();
-    mqttClient.connect(MQTT_BROKER);
+    Serial.println("Arduino Uno - Started Setup");
     humanSensor.begin();
     Serial.println("NFC Adapter - Starting...");
     nfc.begin(false);
     Serial.println("NFC Adapter - Started");
     servo.begin();
     Serial.println("Arduino Uno - Finished Setup");
+    delay(DEFAULT_MINIMUM_DELAY_TIME);
 }
 
 void loop() {
-    Serial.print("->L");
+    if (Serial.available()) {
+        Serial.print("echo: " + Serial.readString());
+    }
     rgbled.update();
     servo.update();
     updateCameraLight();
-    mqttClient.poll();
     if (areReadingsBlocked() || !nfc.tagPresent()) {
-        Serial.print("!");
         delay(DEFAULT_MINIMUM_DELAY_TIME);
         return;
     }
     blockReadings(7000);
-    Serial.print("T");
     String nfcTagId = nfc.read().getUidString();
     Serial.println("NFC Tag ID: " + nfcTagId);
-    Serial.print("H");
     if (humanSensor.detectHuman())
         Serial.println("Sensor found human");
     else
         Serial.println("found nothing");
-    Serial.print("D");
-    Serial.println(lightSensor.readLightPercentage());
-    Serial.print("S");
     buzzer.buzz(3000, 5000);
-    Serial.print("F");
     rgbled.setColor(GREEN, 5000);
-    Serial.print("M");
     servo.rotate(90, 1500);
-    Serial.print("|");
     delay(DEFAULT_MINIMUM_DELAY_TIME);
 }

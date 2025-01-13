@@ -1,6 +1,6 @@
 #include <ArduinoMqttClient.h>
-#if defined(ARDUINO_AVR_UNO)
-#include <UnoWiFi.h>
+#if defined(ARDUINO_ARCH_SAMD)
+#include <WiFiNINA.h>
 #elif defined(ARDUINO_ARCH_ESP32)
 #include <WiFi.h>
 #endif
@@ -10,10 +10,10 @@ inline char* WIFI_SSID = "Redmi do Pedro";
 inline char* WIFI_PASSWORD = "ahnaosei";
 
 
-const char MQTT_BROKER[] = "f9bb39c5d7f044479e71d6922c6992e7.s1.eu.hivemq.cloud"; // TODO
+const char MQTT_BROKER[] = "test.mosquitto.org"; // TODO
 
-const String mqtt_user = "wo";       //write only access broker
-const String mqtt_password = "writeonly";
+const String mqtt_user = "rw";       //write only access broker
+const String mqtt_password = "readwrite";
 
 void connectToWiFi();
 
@@ -26,6 +26,6 @@ public:
 
 private:
     static constexpr int DEFAULT_QOS = 2;
-    static constexpr int DEFAULT_PORT = 8883;
+    static constexpr int DEFAULT_PORT = 1884;
     WiFiClient wifiClient;
 };

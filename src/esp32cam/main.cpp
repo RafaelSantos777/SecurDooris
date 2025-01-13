@@ -8,7 +8,7 @@ const String UPLOAD_INTRUDER_URL = "http://192.168.5.210:1880/upload_intruder";
 
 void setup() {
     Serial.begin(115200);
-    Serial.println("ESP32 CAM - Started");
+    Serial.println("ESP32 CAM - Started Setup");
     camera.begin();
     connectToWiFi();
     Serial.print("Waiting for command: ");
@@ -43,5 +43,5 @@ void loop() {
         Serial.print("Waiting for command: ");
     }
     delay(100);
-    
+
 }

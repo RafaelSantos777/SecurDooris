@@ -8,7 +8,7 @@ void SecurDoorisServo::begin() {
     Serial.println("Servo Motor - Starting...");
     attach(pin);
     write(0);//TODO make sure this is diferent from the open door position
-    Serial.println("Servo Motor - Done");
+    Serial.println("Servo Motor - Started");
 }
 
 void SecurDoorisServo::rotate(int degrees, unsigned long duration) {
@@ -21,7 +21,6 @@ void SecurDoorisServo::rotate(int degrees, unsigned long duration) {
 void SecurDoorisServo::update() {
     unsigned long currentTime = millis();
     if (currentTime > endTime) {
-        Serial.println("less");
         return;
     }
     float timeRatio = ((float)currentTime - startTime) / (endTime - startTime);//

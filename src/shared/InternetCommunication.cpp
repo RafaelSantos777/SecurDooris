@@ -21,8 +21,7 @@ void SecurDoorisMQTTClient::sendMessage(String message, String topic, int qos) {
 void connectToWiFi()
 {
     Serial.print("Connecting to WiFi...");
-    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-    while (WiFi.status() != WL_CONNECTED) {
+    while (WiFi.begin(WIFI_SSID, WIFI_PASSWORD) != WL_CONNECTED) {
         delay(500);
         Serial.print(".");
     }
