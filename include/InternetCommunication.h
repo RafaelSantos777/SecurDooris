@@ -9,6 +9,10 @@
 inline char* WIFI_SSID = "Redmi do Pedro";
 inline char* WIFI_PASSWORD = "ahnaosei";
 
+const String CAMERA_COMMANDS_TOPIC = "camera_commands";
+const String ARDUINO_COMMANDS_TOPIC = "arduino_commands";
+const String NFC_READINGS_TOPIC = "nfc_readings";
+
 
 const char MQTT_BROKER[] = "test.mosquitto.org";
 

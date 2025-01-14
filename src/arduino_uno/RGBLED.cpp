@@ -7,7 +7,8 @@ RGBLED::RGBLED(int redPin, int greenPin, int bluePin) : redPin(redPin), greenPin
     pinMode(bluePin, OUTPUT);
 }
 
-void RGBLED::setColor(Color color, unsigned long duration) {
+
+void RGBLED::setColor(Color color, unsigned long duration, LIGHTTYPE lightType) {
     analogWrite(redPin, color.red);
     analogWrite(greenPin, color.green);
     analogWrite(bluePin, color.blue);
