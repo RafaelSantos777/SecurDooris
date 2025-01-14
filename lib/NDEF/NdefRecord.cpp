@@ -2,27 +2,27 @@
 
 NdefRecord::NdefRecord()
 {
-    //Serial.println("NdefRecord Constructor 1");
+    //// Serial.println("NdefRecord Constructor 1");
     _tnf = 0;
     _typeLength = 0;
     _payloadLength = 0;
     _idLength = 0;
-    _type = (byte *)(void *)0;
-    _payload = (byte *)(void *)0;
-    _id = (byte *)(void *)0;
+    _type = (byte*)(void*)0;
+    _payload = (byte*)(void*)0;
+    _id = (byte*)(void*)0;
 }
 
 NdefRecord::NdefRecord(const NdefRecord& rhs)
 {
-    //Serial.println("NdefRecord Constructor 2 (copy)");
+    //// Serial.println("NdefRecord Constructor 2 (copy)");
 
     _tnf = rhs._tnf;
     _typeLength = rhs._typeLength;
     _payloadLength = rhs._payloadLength;
     _idLength = rhs._idLength;
-    _type = (byte *)(void *)0;
-    _payload = (byte *)(void *)0;
-    _id = (byte *)(void *)0;
+    _type = (byte*)(void*)0;
+    _payload = (byte*)(void*)0;
+    _id = (byte*)(void*)0;
 
     if (_typeLength)
     {
@@ -48,7 +48,7 @@ NdefRecord::NdefRecord(const NdefRecord& rhs)
 
 NdefRecord::~NdefRecord()
 {
-    //Serial.println("NdefRecord Destructor");
+    //// Serial.println("NdefRecord Destructor");
     if (_typeLength)
     {
         free(_type);
@@ -67,7 +67,7 @@ NdefRecord::~NdefRecord()
 
 NdefRecord& NdefRecord::operator=(const NdefRecord& rhs)
 {
-    //Serial.println("NdefRecord ASSIGN");
+    //// Serial.println("NdefRecord ASSIGN");
 
     if (this != &rhs)
     {
@@ -136,7 +136,7 @@ int NdefRecord::getEncodedSize()
     return size;
 }
 
-void NdefRecord::encode(byte *data, bool firstRecord, bool lastRecord)
+void NdefRecord::encode(byte* data, bool firstRecord, bool lastRecord)
 {
     // assert data > getEncodedSize()
 
@@ -151,7 +151,8 @@ void NdefRecord::encode(byte *data, bool firstRecord, bool lastRecord)
     if (_payloadLength <= 0xFF) {  // short record
         *data_ptr = _payloadLength;
         data_ptr += 1;
-    } else { // long format
+    }
+    else { // long format
         // 4 bytes but we store length as an int
         data_ptr[0] = 0x0; // (_payloadLength >> 24) & 0xFF;
         data_ptr[1] = 0x0; // (_payloadLength >> 16) & 0xFF;
@@ -166,7 +167,7 @@ void NdefRecord::encode(byte *data, bool firstRecord, bool lastRecord)
         data_ptr += 1;
     }
 
-    //Serial.println(2);
+    //// Serial.println(2);
     memcpy(data_ptr, _type, _typeLength);
     data_ptr += _typeLength;
 
@@ -247,9 +248,9 @@ void NdefRecord::getType(uint8_t* type)
     memcpy(type, _type, _typeLength);
 }
 
-void NdefRecord::setType(const byte * type, const unsigned int numBytes)
+void NdefRecord::setType(const byte* type, const unsigned int numBytes)
 {
-    if(_typeLength)
+    if (_typeLength)
     {
         free(_type);
     }
@@ -260,12 +261,12 @@ void NdefRecord::setType(const byte * type, const unsigned int numBytes)
 }
 
 // assumes the caller sized payload properly
-void NdefRecord::getPayload(byte *payload)
+void NdefRecord::getPayload(byte* payload)
 {
     memcpy(payload, _payload, _payloadLength);
 }
 
-void NdefRecord::setPayload(const byte * payload, const int numBytes)
+void NdefRecord::setPayload(const byte* payload, const int numBytes)
 {
     if (_payloadLength)
     {
@@ -285,12 +286,12 @@ String NdefRecord::getId()
     return String(id);
 }
 
-void NdefRecord::getId(byte *id)
+void NdefRecord::getId(byte* id)
 {
     memcpy(id, _id, _idLength);
 }
 
-void NdefRecord::setId(const byte * id, const unsigned int numBytes)
+void NdefRecord::setId(const byte* id, const unsigned int numBytes)
 {
     if (_idLength)
     {
@@ -304,49 +305,50 @@ void NdefRecord::setId(const byte * id, const unsigned int numBytes)
 
 void NdefRecord::print()
 {
-    Serial.println(F("  NDEF Record"));
-    Serial.print(F("    TNF 0x"));Serial.print(_tnf, HEX);Serial.print(" ");
+    // Serial.println(F("  NDEF Record"));
+    // Serial.print(F("    TNF 0x"));// Serial.print(_tnf, HEX);// Serial.print(" ");
     switch (_tnf) {
     case TNF_EMPTY:
-        Serial.println(F("Empty"));
+        // Serial.println(F("Empty"));
         break;
     case TNF_WELL_KNOWN:
-        Serial.println(F("Well Known"));
+        // Serial.println(F("Well Known"));
         break;
     case TNF_MIME_MEDIA:
-        Serial.println(F("Mime Media"));
+        // Serial.println(F("Mime Media"));
         break;
     case TNF_ABSOLUTE_URI:
-        Serial.println(F("Absolute URI"));
+        // Serial.println(F("Absolute URI"));
         break;
     case TNF_EXTERNAL_TYPE:
-        Serial.println(F("External"));
+        // Serial.println(F("External"));
         break;
     case TNF_UNKNOWN:
-        Serial.println(F("Unknown"));
+        // Serial.println(F("Unknown"));
         break;
     case TNF_UNCHANGED:
-        Serial.println(F("Unchanged"));
+        // Serial.println(F("Unchanged"));
         break;
     case TNF_RESERVED:
-        Serial.println(F("Reserved"));
+        // Serial.println(F("Reserved"));
         break;
     default:
-        Serial.println();
+        // Serial.println();
+        break;
     }
-    Serial.print(F("    Type Length 0x"));Serial.print(_typeLength, HEX);Serial.print(" ");Serial.println(_typeLength);
-    Serial.print(F("    Payload Length 0x"));Serial.print(_payloadLength, HEX);;Serial.print(" ");Serial.println(_payloadLength);
+    // Serial.print(F("    Type Length 0x"));// Serial.print(_typeLength, HEX);// Serial.print(" ");// Serial.println(_typeLength);
+    // Serial.print(F("    Payload Length 0x"));// Serial.print(_payloadLength, HEX);;// Serial.print(" ");// Serial.println(_payloadLength);
     if (_idLength)
     {
-        Serial.print(F("    Id Length 0x"));Serial.println(_idLength, HEX);
+        // Serial.print(F("    Id Length 0x"));// Serial.println(_idLength, HEX);
     }
-    Serial.print(F("    Type "));PrintHexChar(_type, _typeLength);
+    // Serial.print(F("    Type "));PrintHexChar(_type, _typeLength);
     // chunk large payloads so this is readable
-    Serial.print(F("    Payload "));PrintHexChar(_payload, _payloadLength);
+    // Serial.print(F("    Payload "));PrintHexChar(_payload, _payloadLength);
     if (_idLength)
     {
-        Serial.print(F("    Id "));PrintHexChar(_id, _idLength);
+        // Serial.print(F("    Id "));PrintHexChar(_id, _idLength);
     }
-    Serial.print(F("    Record is "));Serial.print(getEncodedSize());Serial.println(" bytes");
+    // Serial.print(F("    Record is "));// Serial.print(getEncodedSize());// Serial.println(" bytes");
 
 }

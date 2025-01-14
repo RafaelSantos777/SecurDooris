@@ -1,20 +1,18 @@
 #include <SecurDoorisNFCAdapter.h>
 
-
-unsigned long blockEndTime = 0;
+bool readerBlocked = true;
 
 String readTagId(NfcAdapter nfc) {
     NfcTag nfcTag = nfc.read();
     return nfcTag.getUidString();
 }
 
-
-void blockReadings(unsigned long duration)
+void blockTagReader(bool block)
 {
-    blockEndTime = millis() + duration;
+    readerBlocked = block;
 }
 
-bool readingsBlocked()
+bool tagReaderBlocked()
 {
-    return millis() < blockEndTime;
+    return readerBlocked;
 }

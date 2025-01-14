@@ -9,7 +9,7 @@ enum BoardCommand {
     WARN_INVALID_HAND_CODE,
     REQUEST_HAND_PHOTO_UPLOAD,
     UPDATE_SESSION, //only for nano
-    NFC //only for nano
+    NFC = 14 //only for nano
 };
 
 const bool IN_DEBUG_MODE = true;//TODO apagar dps de tudo a funcionar

@@ -12,6 +12,7 @@ inline char* WIFI_PASSWORD = "ahnaosei";
 const String CAMERA_COMMANDS_TOPIC = "camera_commands";
 const String ARDUINO_COMMANDS_TOPIC = "arduino_commands";
 const String NFC_READINGS_TOPIC = "nfc_readings";
+const String UPDATE_SESSION_TOPIC = "update_session";
 
 
 const char MQTT_BROKER[] = "test.mosquitto.org";

@@ -34,10 +34,12 @@ void loop() {
     mqttClient.poll();
     if (mqttClient.available()) {
         String message = mqttClient.readString();
+        Serial.println("Received: " + message);
         Serial1.println(message);
     }
     if (Serial1.available()) {
         String input = Serial1.readStringUntil('\n');
+
         switch (input.toInt()) {
         case TURN_ON_LIGHT:
             mqttClient.sendMessage(TURN_ON_LIGHT, CAMERA_COMMANDS_TOPIC);
@@ -47,6 +49,9 @@ void loop() {
             break;
         case UPLOAD_HAND_PHOTO:
             mqttClient.sendMessage(UPLOAD_HAND_PHOTO, CAMERA_COMMANDS_TOPIC);
+            break;
+        case UPDATE_SESSION:
+            mqttClient.sendMessage("1", UPDATE_SESSION_TOPIC);
             break;
         case NFC:
             mqttClient.sendMessage(Serial1.readStringUntil('\n'), NFC_READINGS_TOPIC);
