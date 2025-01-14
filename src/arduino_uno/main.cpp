@@ -33,17 +33,23 @@ void updateCameraLight() {
     static bool isCameraLightOn = false;
     static const int CAMERA_LIGHT_ACTIVATION_THRESHOLD = 40;
     if (lightSensor.readLightPercentage() <= CAMERA_LIGHT_ACTIVATION_THRESHOLD && !isCameraLightOn) {
-        Serial.print(TURN_ON_LIGHT);
+        if (IN_UNO_DEBUG_MODE)
+            Serial.print(TURN_ON_LIGHT);
+        else
+            Serial.write(TURN_ON_LIGHT);
         isCameraLightOn = true;
     }
     else if (lightSensor.readLightPercentage() > CAMERA_LIGHT_ACTIVATION_THRESHOLD && isCameraLightOn) {
-        Serial.print(TURN_OFF_LIGHT);
+        if (IN_UNO_DEBUG_MODE)
+            Serial.print(TURN_OFF_LIGHT);
+        else
+            Serial.write(TURN_OFF_LIGHT);
         isCameraLightOn = false;
     }
 }
 
 void setup() {
-    delay(3000);
+    delay(5000);
     Serial.begin(9600);
     Serial.println("Buzzer, Light Sensor and LED - Started");
     Serial.println("Arduino Uno - Started Setup");
@@ -53,7 +59,7 @@ void setup() {
     Serial.println("NFC Adapter - Started");
     servo.begin();
     Serial.println("Arduino Uno - Finished Setup");
-    delay(DEFAULT_MINIMUM_DELAY_TIME);
+    delay(3000);
 }
 
 void loop() {

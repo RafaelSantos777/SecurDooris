@@ -6,3 +6,6 @@ enum BoardCommand {
     SOUND_ALARM,
     OPEN_DOOR
 };
+
+const bool IN_UNO_DEBUG_MODE = true;//TODO apagar dps de tudo a funcionar
+

@@ -5,16 +5,14 @@
 SecurDoorisMQTTClient mqttClient;
 
 
-int lastPoint = millis();
-const int TIME_BETWEEN_POINTS = 1000;
 
-void loopDelay(bool debug = true) {
-    if (debug) {
-        if (millis() - lastPoint > TIME_BETWEEN_POINTS) {
-            Serial.print("."); lastPoint = millis();
-        }
+const int TIME_BETWEEN_POINTS = 1000;//TODO apagar dps de tudo a funcionar
+
+void loopDelay() {//TODO apagar dps de tudo a funcionar
+    static int lastPoint = millis();
+    if (millis() - lastPoint > TIME_BETWEEN_POINTS) {
+        Serial.print("."); lastPoint = millis();
     }
-    delay(10);
 }
 
 void setup() {
@@ -31,31 +29,51 @@ void setup() {
 void loop() {
     mqttClient.poll();
     if (Serial1.available()) {
-        String input = Serial1.readString();
-        switch (input.toInt()) {
-        case TURN_ON_LIGHT:
-            Serial.println("Turning on light");
-            digitalWrite(LED_BUILTIN, HIGH);
-            break;
-        case TURN_OFF_LIGHT:
-            Serial.println("Turning off light");
-            digitalWrite(LED_BUILTIN, LOW);
-            break;
-        case UPLOAD_HAND_PHOTO:
-            break;
-        case UPLOAD_INTRUDER_PHOTO:
-            break;
-        default:
-            Serial.println("\n\tReceived message from Uno \n" + input);
-            break;
+        if (IN_UNO_DEBUG_MODE) {//TODO apagar dps de tudo a funcionar
+            String input = Serial1.readString();
+            switch (input.toInt()) {
+            case TURN_ON_LIGHT:
+                digitalWrite(LED_BUILTIN, HIGH);
+                mqttClient.sendMessage(TURN_ON_LIGHT, "camera");
+                break;
+            case TURN_OFF_LIGHT:
+                digitalWrite(LED_BUILTIN, LOW);
+                mqttClient.sendMessage(TURN_OFF_LIGHT, "camera");
+                break;
+            case UPLOAD_HAND_PHOTO:
+                mqttClient.sendMessage(UPLOAD_HAND_PHOTO, "camera");
+                break;
+            default:
+                Serial.println("\n\tReceived message from Uno \n" + input);
+                break;
+            }
+        }
+        else {
+            switch (Serial1.read()) {
+            case TURN_ON_LIGHT:
+                mqttClient.sendMessage(TURN_ON_LIGHT, "camera");
+                break;
+            case TURN_OFF_LIGHT:
+                mqttClient.sendMessage(TURN_OFF_LIGHT, "camera");
+                break;
+            case UPLOAD_HAND_PHOTO:
+                mqttClient.sendMessage(UPLOAD_HAND_PHOTO, "camera");
+                break;
+            default:
+                Serial.println("\n\tReceived something from Uno, but it ain't a BOARDCOMMAND\n");
+                break;
+            }
         }
     }
-    if (Serial.available()) {
-        String input = Serial.readString();
-        Serial.print("\nYou wrote '" + input + "', sending it to Uno...");
-        Serial1.print(input);
-    }
-    loopDelay();
-}
 
-// mqttClient.sendMessage(TURN_ON_LIGHT, "camera/light");
+
+    if (IN_UNO_DEBUG_MODE) {
+        if (Serial.available()) {//TODO apagar dps de tudo a funcionar
+            String input = Serial.readString();
+            Serial.print("\nYou wrote '" + input + "', sending it to Uno...");
+            Serial1.print(input);
+        }
+        loopDelay(); //TODO apagar dps de tudo a funcionar
+    }
+    else delay(10);
+}

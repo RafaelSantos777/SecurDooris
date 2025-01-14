@@ -1,4 +1,6 @@
 #include <InternetCommunication.h>
+
+
 SecurDoorisMQTTClient::SecurDoorisMQTTClient() : MqttClient(wifiClient) {}
 
 void SecurDoorisMQTTClient::connect(const char broker[], int port) {
@@ -13,9 +15,14 @@ void SecurDoorisMQTTClient::connect(const char broker[], int port) {
 }
 
 void SecurDoorisMQTTClient::sendMessage(String message, String topic, int qos) {
-    beginMessage(topic, false, qos);
-    print(message);
+    Serial.println("Sending message to topic: SecurDooris/" + topic + " - " + message);
+    beginMessage("SecurDooris/" + topic, false, qos);
+    print(message + " "+ String(millis()));
     endMessage();
+    Serial.println("Message Sent");
+}
+void SecurDoorisMQTTClient::sendMessage(int message, String topic, int qos) {
+    sendMessage(String(message), topic, qos);
 }
 
 void connectToWiFi()
