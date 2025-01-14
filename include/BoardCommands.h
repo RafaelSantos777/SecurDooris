@@ -12,5 +12,5 @@ enum BoardCommand {
     NFC //only for nano
 };
 
-const bool IN_UNO_DEBUG_MODE = true;//TODO apagar dps de tudo a funcionar
+const bool IN_DEBUG_MODE = true;//TODO apagar dps de tudo a funcionar
 

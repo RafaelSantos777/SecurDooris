@@ -7,16 +7,19 @@
 #include <SecurDoorisServo.h>
 #include <BoardCommands.h>
 
-const int MINIMUM_TIME_BETWEEN_SESSIONS = 60000;
-const int MAXIMUM_WAIT_FOR_HUMAN_PRESENCE = 10000;
+const int MINIMUM_TIME_BETWEEN_SESSIONS = 60 * 1000;
+const int MAXIMUM_WAIT_FOR_HUMAN_PRESENCE = 10 * 1000;
+const int CAMERA_LIGHT_ACTIVATION_THRESHOLD = 20;
 const int DEFAULT_MINIMUM_DELAY_TIME = 50;
+const int FAST_FEEDBACK_TIME = 2000;
+const int HAND_WAIT_INPUT_TIME = 2000;
+
 const Color INPUT_ACCEPTED_COLOR = GREEN;
 const Color INPUT_DENIED_COLOR = RED;
 const Color WAIT_FOR_USER_INPUT_COLOR = BLUE;
 const Color ALARM_COLOR = RED;
 const Color THINKING_COLOR = YELLOW;
 const Color DOOR_OPEN_COLOR = WHITE;
-
 
 Buzzer buzzer(2);
 LightSensor lightSensor(A0); // 5V
@@ -27,93 +30,95 @@ SecurDoorisServo servo(8); // 5V
 
 
 // TODO TEMPORARY CODE
-unsigned long blockEndTime = 0;
 unsigned long currentTime = 0;
 unsigned long lastHumanDetectionTime = 0;
 unsigned long lastSessionLatestUpdateTime = 0;
 bool humanNearby = false;
-
-void blockReadings(unsigned long duration) {
-    blockEndTime = currentTime + duration;
-}
-
-bool areReadingsBlocked() {
-    return currentTime < blockEndTime;
-}
-// TEMPORARY CODE END
-
+int lastAction = 0;
 
 
 void readAndSendTag() {
-    blockReadings(7000);
-    Serial.print(String(NFC) + nfc.read().getUidString());
+    blockReadings();
+    Serial.println(NFC);
+    Serial.println(nfc.read().getUidString());
     rgbled.setColor(THINKING_COLOR);
+    lastAction = NFC;
 }
 
 void executeCommands() {
     if (Serial.available()) {
-        switch (Serial.read()) {
+        int input = Serial.readStringUntil('\n').toInt();
+        Serial.println("Received: " + String(input));
+        switch (input) {
         case OPEN_DOOR:
-            servo.rotate(180, 1500);
+            rgbled.setColor(INPUT_ACCEPTED_COLOR);
+            delay(FAST_FEEDBACK_TIME);
+            Serial.println("Opening door");
             rgbled.setColor(DOOR_OPEN_COLOR);
+            delay(FAST_FEEDBACK_TIME);
+            servo.rotate(190, 1500);
             break;
         case SOUND_ALARM:
+            Serial.println("Sounding alarm");
             buzzer.buzz(3000, 5000);
             rgbled.setColor(ALARM_COLOR, 5000, ALARM); //TODO blinking
             break;
         case WARN_INVALID_NFC_TAG:
-            rgbled.setColor(INPUT_DENIED_COLOR, 2000);
+            rgbled.setColor(INPUT_DENIED_COLOR);
+            delay(FAST_FEEDBACK_TIME);
+            rgbled.setColor(WAIT_FOR_USER_INPUT_COLOR);
+            blockReadings(0);
             break;
         case WARN_INVALID_HAND_CODE:
-            rgbled.setColor(INPUT_DENIED_COLOR, 2000);
+            rgbled.setColor(INPUT_DENIED_COLOR);
             break;
         case REQUEST_HAND_PHOTO_UPLOAD:
-            rgbled.setColor(INPUT_ACCEPTED_COLOR);
-            delay(1000);
-            rgbled.setColor(WAIT_FOR_USER_INPUT_COLOR, 2000);
-            delay(1500);
-            if (IN_UNO_DEBUG_MODE)
-                Serial.print(UPLOAD_HAND_PHOTO);
-            else
-                Serial.write(UPLOAD_HAND_PHOTO);
+            if (lastAction == NFC)
+            {
+                rgbled.setColor(INPUT_ACCEPTED_COLOR);
+                delay(FAST_FEEDBACK_TIME);
+            }
+            Serial.println("Requesting hand number");
+            rgbled.setColor(WAIT_FOR_USER_INPUT_COLOR, HAND_WAIT_INPUT_TIME);
+            delay(HAND_WAIT_INPUT_TIME - 500);
+            lastAction = UPLOAD_HAND_PHOTO;
+            Serial.println(UPLOAD_HAND_PHOTO);
             delay(500);
             rgbled.setColor(THINKING_COLOR);
+            break;
+        default:
             break;
         }
     }
 }
 
 void updateCameraLight(bool humanPresent = true) {
+
     static bool isCameraLightOn = false;
-    static const int CAMERA_LIGHT_ACTIVATION_THRESHOLD = 10;
     if ((!humanPresent || lightSensor.readLightPercentage() > CAMERA_LIGHT_ACTIVATION_THRESHOLD) && isCameraLightOn) {
-        if (IN_UNO_DEBUG_MODE)
-            Serial.print(TURN_OFF_LIGHT);
-        else
-            Serial.write(TURN_OFF_LIGHT);
+        Serial.println(TURN_OFF_LIGHT);
         isCameraLightOn = false;
     }
-    else if (lightSensor.readLightPercentage() <= CAMERA_LIGHT_ACTIVATION_THRESHOLD && !isCameraLightOn) {
-        if (IN_UNO_DEBUG_MODE)
-            Serial.print(TURN_ON_LIGHT);
-        else
-            Serial.write(TURN_ON_LIGHT);
+    else if (humanPresent && lightSensor.readLightPercentage() <= CAMERA_LIGHT_ACTIVATION_THRESHOLD && !isCameraLightOn) {
+        Serial.println(TURN_ON_LIGHT);
         isCameraLightOn = true;
     }
 
 }
 
 void detectionLogic() {
-    if (humanSensor.detectHuman()) {
-        updateCameraLight();
+    if (humanSensor.detectHuman()) { //TODO não estar sempre
         lastHumanDetectionTime = millis();
         lastSessionLatestUpdateTime = millis();
-        if (!humanNearby) humanNearby = true;
+        if (!humanNearby) {
+            humanNearby = true;
+            rgbled.setColor(WAIT_FOR_USER_INPUT_COLOR);
+        }
     }
     else {
-        if (currentTime - lastHumanDetectionTime > MAXIMUM_WAIT_FOR_HUMAN_PRESENCE) {
+        if (currentTime - lastHumanDetectionTime > MAXIMUM_WAIT_FOR_HUMAN_PRESENCE && humanNearby) {
             updateCameraLight(false);
-            servo.rotate(-180, 1500);
+            servo.rotate(-190, 1500);
             rgbled.setColor(OFF, 5000);
             humanNearby = false;
         }
@@ -123,10 +128,8 @@ void detectionLogic() {
 void setup() {
     delay(5000);
     Serial.begin(9600);
-    if (IN_UNO_DEBUG_MODE)
-        Serial.print(TURN_OFF_LIGHT);
-    else
-        Serial.write(TURN_OFF_LIGHT);
+    Serial.setTimeout(100);
+    Serial.println(TURN_OFF_LIGHT);
     Serial.println("Buzzer, Light Sensor and LED - Started");
     Serial.println("Arduino Uno - Started Setup");
     humanSensor.begin();
@@ -145,22 +148,19 @@ void loop() {
     currentTime = millis();
     detectionLogic();
     if (humanNearby) {
-        if (areReadingsBlocked() || !nfc.tagPresent()) {
-            delay(DEFAULT_MINIMUM_DELAY_TIME);
+        updateCameraLight();
+        executeCommands();
+        if (readingsBlocked() || !nfc.tagPresent(12.5)) {
             return;
         }
         else {
             if (currentTime - lastSessionLatestUpdateTime > MINIMUM_TIME_BETWEEN_SESSIONS) {
                 lastSessionLatestUpdateTime = currentTime;
-                if (IN_UNO_DEBUG_MODE)
-                    Serial.print(UPDATE_SESSION);
-                else
-                    Serial.write(UPDATE_SESSION);
+                Serial.println("Update Session message");
+                Serial.println(UPDATE_SESSION);
             }
             readAndSendTag();
         }
-
-        executeCommands();
     }
 
     delay(DEFAULT_MINIMUM_DELAY_TIME);

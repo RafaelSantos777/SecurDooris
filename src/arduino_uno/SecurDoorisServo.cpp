@@ -7,7 +7,7 @@ SecurDoorisServo::SecurDoorisServo(int pin) : pin(pin) {}
 void SecurDoorisServo::begin() {
     Serial.println("Servo Motor - Starting...");
     attach(pin);
-    write(0);//TODO make sure this is diferent from the open door position
+    write(-10);//TODO make sure this is diferent from the open door position
     Serial.println("Servo Motor - Started");
 }
 

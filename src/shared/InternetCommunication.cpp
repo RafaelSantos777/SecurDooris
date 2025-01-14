@@ -4,7 +4,7 @@
 SecurDoorisMQTTClient::SecurDoorisMQTTClient() : MqttClient(wifiClient) {}
 
 void SecurDoorisMQTTClient::connect(const char broker[], int port) {
-    Serial.println("MQTT - Connecting to MQTT Client");
+    Serial.println("MQTT - Connecting to MQTT Client...");
     setUsernamePassword(mqtt_user, mqtt_password);
     if (!MqttClient::connect(broker, port)) {
         Serial.print("MQTT connection failed! Error code = ");
@@ -15,11 +15,11 @@ void SecurDoorisMQTTClient::connect(const char broker[], int port) {
 }
 
 void SecurDoorisMQTTClient::sendMessage(String message, String topic, int qos) {
-    Serial.println("MQTT - Sending message to topic: SecurDooris/" + topic + " - " + message);
+    Serial.print("MQTT - Sending message '" + message + "' to topic 'SecurDooris/" + topic + "'...");
     beginMessage("SecurDooris/" + topic, false, qos);
     print(message);
     endMessage();
-    Serial.println("MQTT - Message Sent");
+    Serial.println(" Message Sent");
 }
 void SecurDoorisMQTTClient::sendMessage(int message, String topic, int qos) {
     sendMessage(String(message), topic, qos);
@@ -36,5 +36,5 @@ void connectToWiFi()
 #endif
         Serial.print(".");
     }
-    Serial.println("WiFi - Connected to WiFi");
+    Serial.println("\nWiFi - Connected to WiFi");
 }
