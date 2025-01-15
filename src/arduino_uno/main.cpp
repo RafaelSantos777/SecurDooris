@@ -52,7 +52,7 @@ void checkTag() {
         Serial.println(NFC);
         Serial.println(nfc.read().getUidString());
         lastSessionLatestUpdateTime = currentTime;
-        rgbled.setColor(THINKING_COLOR);
+        rgbled.setColorBlink(THINKING_COLOR, 0, THINKING);
         lastAction = NFC;
     }
 }
@@ -64,6 +64,7 @@ void executeCommands() {
         switch (input) {
         case OPEN_DOOR:
             rgbled.setColor(INPUT_ACCEPTED_COLOR);
+            buzzer.buzz(20, 200);
             delay(FAST_FEEDBACK_TIME);
             rgbled.setColor(DOOR_OPEN_COLOR);
             delay(250);
@@ -73,11 +74,10 @@ void executeCommands() {
             return;
         case SOUND_ALARM:
             buzzer.buzz(3000, ALARM_TIME);
-            rgbled.setColor(ALARM_COLOR, ALARM_TIME, ALARM); //TODO blinking
-            lastSessionLatestUpdateTime = -MINIMUM_TIME_BETWEEN_SESSIONS;
+            rgbled.setColorBlink(ALARM_COLOR, ALARM_TIME, ALARM); //TODO blinking
+            lastSessionLatestUpdateTime = millis() - (MINIMUM_TIME_BETWEEN_SESSIONS - ALARM_TIME);
             servo.rotate(-190, 1500);
             closing = true;
-            delay(ALARM_TIME);
             return;
         case WARN_INVALID_NFC_TAG:
             rgbled.setColor(INPUT_DENIED_COLOR);
@@ -94,6 +94,7 @@ void executeCommands() {
             if (lastAction == NFC)
             {
                 rgbled.setColor(INPUT_ACCEPTED_COLOR);
+                buzzer.buzz(100, 200);
                 delay(FAST_FEEDBACK_TIME);
             }
             rgbled.setColor(WAIT_FOR_USER_INPUT_COLOR, HAND_WAIT_INPUT_TIME);
@@ -167,7 +168,7 @@ void loop() {
     servo.update();
     currentTime = millis();
     checkDetection();
-    if (humanNearby) {
+    if (humanNearby && !closing) {
         updateCameraLight();
         executeCommands();
         checkTag();
