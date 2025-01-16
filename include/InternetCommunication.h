@@ -14,7 +14,6 @@
  * and handling MQTT communication for the SecurDooris system.
  */
 
-
  // WiFi credentials
 inline char* WIFI_SSID = "ssid";
 inline char* WIFI_PASSWORD = "pass";
