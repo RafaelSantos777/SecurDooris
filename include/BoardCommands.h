@@ -1,3 +1,16 @@
+/**
+ * @file BoardCommands.h
+ * @brief Defines the commands used for communication between the boards and Node-Red in the SecurDooris system.
+ *
+ * This file contains the enumeration of commands that can be sent to control various components
+ * of the SecurDooris system, such as turning on/off lights, uploading photos, opening doors,
+ * sounding alarms, and handling NFC tags.
+ */
+
+ /**
+  * @enum BoardCommand
+  * @brief Enumeration of commands for board communication.
+  */
 enum BoardCommand {
     PING = 0, // only for nano
     TURN_ON_LIGHT = 1,

@@ -1,9 +1,9 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 
-const char* ssid = "Redmi do Pedro";
-const char* password = "ahnaosei";
-const String imageUploadURL = "http://192.168.171.210:1880/upload";
+const char* ssid = "ssid";
+const char* password = "pass";
+const String imageUploadURL = "...node-red:1880/upload";
 HTTPClient httpClient;
 int count = 0;
 

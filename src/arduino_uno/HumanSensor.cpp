@@ -1,8 +1,25 @@
 #include "HumanSensor.h"
 
+/**
+ * @file HumanSensor.cpp
+ * @brief Implementation of the HumanSensor class for detecting human presence.
+ *
+ * This file contains the implementation of the HumanSensor class,
+ * which provides methods to initialize and detect human presence using a sensor.
+ */
+
+ /**
+  * @brief Constructor for the HumanSensor class.
+  * @param sensitivity The sensitivity of the sensor.
+  * @param detectInterval The interval between detection checks.
+  */
 HumanSensor::HumanSensor(float sensitivity, int detectInterval) :PresenceDetector(movementSensor, sensitivity, 10.0, detectInterval) {}
 
-// mandatory to be in setup for human sensor to work
+/**
+ * @brief Initializes the human presence sensor.
+ *
+ * This method must be called in the setup function for the sensor to work.
+ */
 void HumanSensor::begin() {
     Serial.println("Human Presence Sensor - Starting...");
     Wire.begin();
@@ -15,6 +32,11 @@ void HumanSensor::begin() {
 
 }
 
+/**
+ * @brief Detects human presence.
+ * @param minimumSensorsDetect The minimum number of sensors that need to detect presence.
+ * @return True if human presence is detected, false otherwise.
+ */
 bool HumanSensor::detectHuman(int minimumSensorsDetect) {
     loop();
     unsigned long now = millis();

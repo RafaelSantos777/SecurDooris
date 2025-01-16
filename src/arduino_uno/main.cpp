@@ -1,3 +1,39 @@
+/**
+ * @file main.cpp
+ * @brief Main control logic for the SecurDooris system running on an Arduino Uno.
+ *
+ * This file contains the main code, as well as helper functions
+ * to manage the SecurDooris system, which includes components such as a buzzer, light sensor,
+ * RGB LED, human sensor, NFC adapter, and servo motor.
+ *
+ * The system operates by detecting a human presence, reading NFC tags, and executing commands
+ * received via serial communication. It provides feedback through sounds and LED colors, and
+ * controls a servo motor to open or close a door.
+ *
+ * Components:
+ * - Buzzer
+ * - Light Sensor
+ * - RGB LED
+ * - Human Sensor
+ * - NFC Adapter
+ * - Servo Motor
+ *
+ * Constants:
+ * - Timing and threshold values for various operations and feedback.
+ *
+ * Variables:
+ * - State variables to manage the current session, human presence, and system actions.
+ *
+ * Functions:
+ * - setup(): Initializes the system and its components.
+ * - loop(): Main loop that continuously checks for human presence, reads NFC tags, and executes commands.
+ * - checkTag(): Reads and processes NFC tags when detected.
+ * - inputDenied(): Provides feedback for denied input.
+ * - inputAccepted(): Provides feedback for accepted input.
+ * - executeCommands(): Executes commands received via serial communication.
+ * - updateCameraLight(): Controls the camera light based on ambient light and human presence.
+ * - checkDetection(): Checks for human presence and manages session timing.
+ */
 #include <Arduino.h>
 #include <Buzzer.h>
 #include <LightSensor.h>
@@ -7,6 +43,7 @@
 #include <SecurDoorisServo.h>
 #include <BoardCommands.h>
 
+ // Constants for timing and thresholds
 const long MINIMUM_TIME_BETWEEN_SESSIONS = 1L * 60 * 1000;
 const int CAMERA_LIGHT_ACTIVATION_THRESHOLD = 100;
 const int DEFAULT_MINIMUM_DELAY_TIME = 50;
@@ -16,6 +53,7 @@ const int ALARM_TIME = 10000;
 const int HAND_WAIT_INPUT_TIME = 2000;
 const int FAST_FEEDBACK_TIME = 2000;
 
+// Constants for buzzer sounds and durations
 const int INPUT_READ_BEEP_TIME = 500;
 const int INPUT_ACCEPTED_BEEP_TIME = 100;
 const int INPUT_DENIED_BEEP_TIME = 200;
@@ -25,6 +63,7 @@ const int INPUT_READ_BUZZ_SOUND = 200;
 const int INPUT_ACCEPTED_BUZZ_SOUND = 100;
 const int INPUT_DENIED_BUZZ_SOUND = 500;
 
+// Colors for RGB LED feedback
 const Color INPUT_ACCEPTED_COLOR = GREEN;
 const Color INPUT_DENIED_COLOR = RED;
 const Color WAIT_FOR_USER_INPUT_COLOR = BLUE;
@@ -32,6 +71,7 @@ const Color ALARM_COLOR = RED;
 const Color THINKING_COLOR = YELLOW;
 const Color DOOR_OPEN_COLOR = WHITE;
 
+// Component instances
 Buzzer buzzer(2);
 LightSensor lightSensor(A0); // 5V
 RGBLED rgbled(3, 5, 6); // R G(far gnd) B(side G)
@@ -43,14 +83,16 @@ SecurDoorisServo servo(8); // 5V
 // If the led stops blinking, something may have gone wrong.
 bool isBuiltInLedOn = false;
 
-/*  Main script logic variables:
-    'currentTime'                   - Used along main script to try to synchronize some actions (has been left here, may have no real impact)
-    'lastSessionLatestUpdateTime'   - Helps Arduino to know when does it needs to stop and turn off all atuators. It is updated when the user moves, tag is read or arduino receives a commands
-    'sessionOpen'                   - Used to tell when a session has changed
-    'humanNearby'                   - Used to allow code to run when a human is nearby
-    'closing'                       - Stops parts of code that shouldn't run after the Alarm was triggered or the door was opened
-    'lastAction'                    - Used to tell when what was the last action (only used once)
-*/
+/**
+ * State variables
+ *
+ * 'currentTime'                   - Used along main script to try to synchronize some actions (has been left here, may have no real impact)
+ * 'lastSessionLatestUpdateTime'   - Helps Arduino to know when does it needs to stop and turn off all atuators. It is updated when the user moves, tag is read or arduino receives a commands
+ * 'sessionOpen'                   - Used to tell when a session has changed
+ * 'humanNearby'                   - Used to allow code to run when a human is nearby
+ * 'closing'                       - Stops parts of code that shouldn't run after the Alarm was triggered or the door was opened
+ * 'lastAction'                    - Used to tell when what was the last action (only used once)
+ */
 long currentTime = 0;
 long lastSessionLatestUpdateTime = -MINIMUM_TIME_BETWEEN_SESSIONS;
 bool sessionOpen = false;
@@ -58,8 +100,10 @@ bool humanNearby = false;
 bool closing = false;
 int lastAction = 0;
 
-
-// When not blocked, reads and sends a present tag. Also tells node-red that a new session has started
+/**
+ * @brief Reads and processes NFC tags when detected.
+ * When not blocked, reads and sends a present tag. Also tells node-red that a new session has started
+ */
 void checkTag() {
     if (!tagReaderBlocked() && nfc.tagPresent(50)) {
         blockTagReader();
@@ -77,7 +121,9 @@ void checkTag() {
     }
 }
 
-// functions that creates the feedback of the input done by the user (called according to commands received)
+/**
+ * @brief Functions that creat the feedback of the input done by the user (called according to commands received).
+ */
 void inputDenied() {
     buzzer.buzz(INPUT_DENIED_BUZZ_SOUND, INPUT_DENIED_BEEP_TIME);
     rgbled.setColor(INPUT_DENIED_COLOR);
@@ -89,7 +135,9 @@ void inputAccepted() {
     delay(FAST_FEEDBACK_TIME);
 }
 
-// executes the actions we for the given commands and updates logic variables for other areas of the code.
+/**
+ * @brief Executes the actions for the given commands and updates logic variables for other areas of the code.
+ */
 void executeCommands() {
     if (Serial.available()) {
         // All messages between nano and uno are separated by '\n'. Nano just sends integers.
@@ -146,8 +194,10 @@ void executeCommands() {
     }
 }
 
-
-// Updates camera light according to light sensed. If humanPresent set to off, it turns off the camera light.
+/**
+ * @brief Controls the camera light based on ambient light.
+ * If humanPresent set to off, it turns off the camera light.
+ */
 void updateCameraLight(bool humanPresent = true) {
     static bool isCameraLightOn = false;
     if ((!humanPresent || lightSensor.readLightPercentage() > CAMERA_LIGHT_ACTIVATION_THRESHOLD) && isCameraLightOn) {
@@ -161,8 +211,10 @@ void updateCameraLight(bool humanPresent = true) {
 
 }
 
+/**
+ * @brief Checks for human presence and manages session timing.
+ */
 void checkDetection() {
-
     // Checks for human and if detected and aren't in the process of closing session updates the session timer
     if (humanSensor.detectHuman() && !closing) {
         lastSessionLatestUpdateTime = currentTime;
@@ -187,6 +239,9 @@ void checkDetection() {
     }
 }
 
+/**
+ * @brief Initializes the system and its components.
+ */
 void setup() {
     delay(5000);
     Serial.begin(9600);
@@ -212,7 +267,9 @@ void setup() {
     delay(3000);
 }
 
-
+/**
+ * @brief Main loop that continuously checks for human presence, reads NFC tags, and executes commands.
+ */
 void loop() {
     // The more frequent update functions are called, the better they work. Explained in more detail in functions definitions
     rgbled.update();

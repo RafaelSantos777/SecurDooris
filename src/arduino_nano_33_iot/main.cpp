@@ -2,26 +2,52 @@
 #include <InternetCommunication.h>
 #include <BoardCommands.h>
 
-
+/**
+ * @file main.cpp
+ * @brief Main control logic for the SecurDooris system running on an Arduino Nano 33 IoT.
+ *
+ * This file contains its main code, as well as helper functions
+ * to manage the SecurDooris system, which includes components such as an MQTT client.
+ *
+ * The system operates by receiving commands via MQTT and forwarding them to an Arduino Uno
+ * and vice-versa
+ *
+ * Components:
+ * - MQTT Client
+ *
+ * Constants:
+ * - A timing value to ping Uno and debug.
+ *
+ * Variables:
+ * - A state variable to help debug.
+ *
+ * Functions:
+ * - setup(): Initializes the system and its components.
+ * - loop(): Main loop that continuously checks for MQTT messages and forwards them to the Arduino Uno.
+ * - loopDelayAndPing(): Delays the loop and sends a ping message.
+ */
 const long PING_AND_LED_UPDATE_TIME_INTERVAL = 500;
-
 bool isBuiltInLedOn = false;
-
 SecurDoorisMQTTClient mqttClient;
 
+/**
+ * @brief Delays the loop and sends a ping message.
+ */
 void loopDelayAndPing() {
-    static long lastPoint = millis();
-
+    static long lastPing = millis();
     // Makes nano led change and pings uno according to the interval
-    if (millis() - lastPoint > PING_AND_LED_UPDATE_TIME_INTERVAL) {
+    if (millis() - lastPing > PING_AND_LED_UPDATE_TIME_INTERVAL) {
         digitalWrite(LED_BUILTIN, isBuiltInLedOn ? LOW : HIGH);
         isBuiltInLedOn = !isBuiltInLedOn;
-        lastPoint = millis();
+        lastPing = millis();
         Serial1.println(PING);
     }
     delay(10);
 }
 
+/**
+ * @brief Initializes the system and its components.
+ */
 void setup() {
     delay(5000);
     Serial.begin(115200);
@@ -38,6 +64,9 @@ void setup() {
     Serial.println("Arduino Nano 33 IoT - Finished Setup");
 }
 
+/**
+ * @brief Main loop that continuously checks for MQTT messages and forwards them to the Arduino Uno.
+ */
 void loop() {
     mqttClient.poll();
     // Function used to make sure it reconnects when connection is lost

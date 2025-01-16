@@ -1,5 +1,22 @@
 #include <Camera.h>
+/**
+ * @file Camera.cpp
+ * @brief Implementation of the Camera class for controlling the ESP32 camera module.
+ *
+ * This file contains the implementation of the Camera class,
+ * which provides methods to initialize the camera, control the camera's LED light,
+ * and upload photos to a specified URL.
+ *
+ * The Camera class is designed to work with the ESP32 camera module and provides
+ * functionalities such as setting up the camera with specific configurations,
+ * turning the camera's LED light on and off, and uploading captured photos
+ * to a server via HTTP.
+ */
 
+
+ /**
+  * @brief Initializes the camera with the specified configuration settings.
+  */
 void Camera::begin() {
     Serial.println("Camera Setup - Starting...");
     config.ledc_channel = LEDC_CHANNEL_0;
@@ -27,24 +44,6 @@ void Camera::begin() {
     config.fb_location = CAMERA_FB_IN_PSRAM;
     config.jpeg_quality = 12;
     config.fb_count = 2;
-
-    //TODO apagar código comentado se nunca for usado
-    // if (config.pixel_format == PIXFORMAT_JPEG) {
-    //     if (psramFound()) {
-    //         config.jpeg_quality = 10;
-    //         config.fb_count = 2;
-    //         config.grab_mode = CAMERA_GRAB_LATEST;
-    //     }
-    //     else {
-    //         // Limit the frame size when PSRAM is not available
-    //         config.frame_size = FRAMESIZE_SVGA;
-    //         config.fb_location = CAMERA_FB_IN_DRAM;
-    //     }
-    // }
-    // else {
-    //     // Best option for face detection/recognition
-    //     config.frame_size = FRAMESIZE_240X240;
-
     esp_err_t err = esp_camera_init(&config);
     if (err != ESP_OK) {
         Serial.printf("Camera init failed with error 0x%x\n", err);
@@ -54,14 +53,25 @@ void Camera::begin() {
     Serial.println("Camera Setup - Done");
 }
 
+/**
+ * @brief Turns on the camera's LED light.
+ */
 void Camera::turnOnLight() {
     digitalWrite(LED_PIN, HIGH);
 }
 
+/**
+ * @brief Turns off the camera's LED light.
+ */
 void Camera::turnOffLight() {
     digitalWrite(LED_PIN, LOW);
 }
 
+/**
+ * @brief Uploads a photo to the specified URL.
+ * @param url The URL to upload the photo to.
+ * @return The HTTP response code from the server.
+ */
 int Camera::uploadPhoto(String url) {
     camera_fb_t* frameBuffer = esp_camera_fb_get();
     httpClient.begin(url);

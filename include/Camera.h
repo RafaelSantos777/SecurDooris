@@ -1,13 +1,35 @@
 #include <Arduino.h>
 #include "esp_camera.h"
 #include <HTTPClient.h>
+// This file defines the Camera class for controlling the ESP32 camera module.
 
+/**
+ * @class Camera
+ * @brief A class to control the ESP32 camera module.
+ */
 class Camera {
 
 public:
+    /**
+     * @brief Initializes the camera with the specified configuration settings.
+     */
     void begin();
+
+    /**
+     * @brief Turns on the camera's LED light.
+     */
     void turnOnLight();
+
+    /**
+     * @brief Turns off the camera's LED light.
+     */
     void turnOffLight();
+
+    /**
+     * @brief Uploads a photo to the specified URL.
+     * @param url The URL to upload the photo to.
+     * @return The HTTP response code from the server.
+     */
     int uploadPhoto(String url);
 
 private:
@@ -31,6 +53,6 @@ private:
     static const int RXp2 = 3;
     static const int TXp2 = 1;
     static const int LED_PIN = 4;
-    HTTPClient httpClient;
-    camera_config_t config;
+    HTTPClient httpClient; ///< HTTP client for uploading photos.
+    camera_config_t config; ///< Configuration settings for the camera.
 };
