@@ -9,7 +9,6 @@ RGBLED::RGBLED(int redPin, int greenPin, int bluePin) : redPin(redPin), greenPin
 }
 
 void RGBLED::set(Color color) {
-
     analogWrite(redPin, color.red);
     analogWrite(greenPin, color.green);
     analogWrite(bluePin, color.blue);
@@ -18,11 +17,15 @@ void RGBLED::set(Color color) {
 void RGBLED::setColor(Color color, unsigned long duration) {//maybe merge with bellow
     set(color);
     endTime = duration == 0 ? 0 : millis() + duration;
+    Serial.println("blink reset");
+    loopTime = 0;
 }
 
 
 
 void RGBLED::setColorBlink(Color color, unsigned long duration, long blinkDuration, bool fade) {
+
+    Serial.println("blink");
     set(color);
     endTime = duration == 0 ? 0 : millis() + duration;
     on = true;
@@ -37,6 +40,8 @@ void RGBLED::update() {
         set(OFF);
         endTime = 0;
         loopTime = 0;
+
+        Serial.println("blink reset");
     }
     if (loopTime > 0) {
 

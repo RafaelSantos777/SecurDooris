@@ -3,7 +3,7 @@
 
 enum Durations { //TODO test
     ON = 0,
-    ALARM = 100,
+    ALARM = 300,
     THINKING = 100,
 };
 
@@ -13,7 +13,7 @@ class RGBLED {
 public:
     RGBLED(int redPin, int greenPin, int bluePin);
     void setColor(Color color, unsigned long duration = 0);
-    void setColorBlink(Color color, unsigned long duration = 0, long lightType = ON, bool fade = false);
+    void setColorBlink(Color color, unsigned long duration = 0, long blinkDuration = 0, bool fade = false);
     void update();
 
 private:

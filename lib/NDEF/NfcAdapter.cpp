@@ -19,7 +19,7 @@ void NfcAdapter::begin(boolean verbose)
 
     if (!versiondata)
     {
-        // Serial.print(F("Didn't find PN53x board"));
+        Serial.print(F("Didn't find PN53x board"));
         while (1); // halt
     }
 

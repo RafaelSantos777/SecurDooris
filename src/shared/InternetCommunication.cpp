@@ -14,13 +14,26 @@ void SecurDoorisMQTTClient::connect(const char broker[], int port) {
     Serial.println("MQTT - Connected to MQTT Client");
 }
 
-void SecurDoorisMQTTClient::sendMessage(String message, String topic, int qos) {
+void SecurDoorisMQTTClient::reconnectIfDisconnected(const char broker[], String topic, int port) {
+    if (!connected()) {
+        Serial.println("MQTT - Got disconnected");
+        if (MqttClient::connect(broker, port)) {
+            subscribe("SecurDooris/" + topic);
+            Serial.println("MQTT - Reconnected");
+
+        }
+    }
+}
+
+void SecurDoorisMQTTClient::sendMessage(String message, String topic, int qos)
+{
     Serial.print("MQTT - Sending message '" + message + "' to topic 'SecurDooris/" + topic + "'...");
     beginMessage("SecurDooris/" + topic, false, qos);
     print(message);
     endMessage();
     Serial.println(" Message Sent");
 }
+
 void SecurDoorisMQTTClient::sendMessage(int message, String topic, int qos) {
     sendMessage(String(message), topic, qos);
 }

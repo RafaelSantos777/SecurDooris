@@ -27,6 +27,7 @@ class SecurDoorisMQTTClient : public MqttClient {
 public:
     SecurDoorisMQTTClient();
     void connect(const char broker[], int port = DEFAULT_PORT);
+    void reconnectIfDisconnected(const char broker[], String topic, int port = DEFAULT_PORT);
     void sendMessage(String message, String topic, int qos = DEFAULT_QOS);
     void sendMessage(int message, String topic, int qos = DEFAULT_QOS);
 
