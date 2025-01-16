@@ -6,8 +6,8 @@
 #endif
 
 
-inline char* WIFI_SSID = "Redmi do Pedro";
-inline char* WIFI_PASSWORD = "ahnaosei";
+inline char* WIFI_SSID = "ssid";
+inline char* WIFI_PASSWORD = "pass";
 
 const String CAMERA_COMMANDS_TOPIC = "camera_commands";
 const String ARDUINO_COMMANDS_TOPIC = "arduino_commands";
