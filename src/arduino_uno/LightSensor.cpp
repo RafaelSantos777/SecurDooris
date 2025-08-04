@@ -16,10 +16,10 @@ LightSensor::LightSensor(int pin) : pin(pin) {
 }
 
 /**
- * @brief Reads the light level as a thousandth (the name is wrong).
- * @return The light level as a thousandth (0-1000).
+ * @brief Reads the light level as a percentage.
+ * @return The light level as a percentage (0-100).
  */
 int LightSensor::readLightPercentage() {
     int analogLight = analogRead(pin);
-    return map(analogLight, 0, MAX_ANALOG_LIGHT, 0, 1000);
+    return map(analogLight, 0, MAX_ANALOG_LIGHT, 0, 100);
 }
